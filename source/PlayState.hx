@@ -20,7 +20,7 @@ class PlayState extends FlxState {
         add(background);
 
 		// Cursor
-		var cursorBitapData = Assets.getBitmapData("assets/images/cursor.png");
+		var cursorBitapData = Assets.getBitmapData("assets/images/cursorDot.png");
 		FlxG.mouse.load(cursorBitapData);
 
         // Player 
