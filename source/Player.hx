@@ -45,13 +45,13 @@ class Player extends FlxSprite {
 				moveY /= length;
 			}
 			velocity.set(moveX * speed, moveY * speed);
+			flipX = (facing == LEFT);
 		}
 		else
 		{
 			velocity.set(0, 0);
 		}
 
-		flipX = (facing == LEFT);
 	}
 
 
@@ -67,9 +67,9 @@ class Player extends FlxSprite {
 			if (distance < interactionRange)
 			{
 				if (FlxG.keys.justPressed.SPACE)
-				{
 					npc.startDialogue(this);
-				}
+				if (FlxG.keys.justPressed.X)
+					npc.endDialogue(this);
 			}
 		}
     }

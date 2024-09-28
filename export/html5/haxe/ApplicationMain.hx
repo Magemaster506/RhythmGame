@@ -47,7 +47,7 @@ class ApplicationMain
 		#if !flash
 		
 		var attributes:lime.ui.WindowAttributes = {
-			allowHighDPI: false,
+			allowHighDPI: true,
 			alwaysOnTop: false,
 			borderless: false,
 			// display: 0,
