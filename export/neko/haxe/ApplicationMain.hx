@@ -35,10 +35,10 @@ class ApplicationMain
 		ManifestResources.init(config);
 		#end
 
-		app.meta["build"] = "7";
+		app.meta["build"] = "8";
 		app.meta["company"] = "HaxeFlixel";
 		app.meta["file"] = "RhythmGame";
-		app.meta["name"] = "RhythmGame";
+		app.meta["name"] = "Rhythm Game";
 		app.meta["packageName"] = "com.example.myapp";
 		app.meta["version"] = "0.0.1";
 
@@ -60,7 +60,7 @@ class ApplicationMain
 			minimized: false,
 			parameters: {},
 			resizable: true,
-			title: "RhythmGame",
+			title: "Rhythm Game",
 			width: 1024,
 			x: null,
 			y: null,
@@ -102,7 +102,7 @@ class ApplicationMain
 		app.createWindow(attributes);
 		
 		#elseif air
-		app.window.title = "RhythmGame";
+		app.window.title = "Rhythm Game";
 		#else
 		app.window.context.attributes.background = 1118481;
 		app.window.frameRate = 60;

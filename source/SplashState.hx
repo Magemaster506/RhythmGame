@@ -16,12 +16,12 @@ class SplashState extends FlxState {
 
         // Load splash screen file
         splashImage = new FlxSprite(0, 0);
-        splashImage.loadGraphic("assets/images/customSplashScreen");
+		splashImage.loadGraphic("assets/images/other/customSplashScreen");
         splashImage.screenCenter();
         add(splashImage);
 
         // Load 1x1 mouse file 
-        var cursorBitapData = Assets.getBitmapData("assets/images/1x1Image.png");
+		var cursorBitapData = Assets.getBitmapData("assets/images/other/1x1Image.png");
 		FlxG.mouse.load(cursorBitapData);
 
         // Fade in

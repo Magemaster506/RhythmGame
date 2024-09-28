@@ -1,7 +1,5 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.input.keyboard.FlxKey;
-import flixel.util.FlxAxes;
 
 class NPC extends FlxSprite {
 	var dialogue:String;
