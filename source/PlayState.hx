@@ -11,6 +11,7 @@ class PlayState extends FlxState {
 	// Allocation
     private var player:Player;
     private var background:FlxSprite;
+	private var npcs:Array<NPC>;
 
     override public function create():Void {
         super.create();      
@@ -24,8 +25,20 @@ class PlayState extends FlxState {
 		var cursorBitapData = Assets.getBitmapData("assets/images/cursorDot.png");
 		FlxG.mouse.load(cursorBitapData);
 
+		// Initialize NPCs
+		npcs = [];
+		var npc1 = new NPC(100, 200, "Hello!");
+		npcs.push(npc1);
+
+		// Iterate through and add each npc
+		for (npc in npcs)
+		{
+			add(npc);
+		}
+
+
         // Player 
-        player = new Player(100, 600); 
+		player = new Player(npcs, 100, 600); 
         add(player);
     }
 

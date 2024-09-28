@@ -1,18 +1,21 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxAxes;
 
 class Player extends FlxSprite {
     public var speed:Float = 250; 
+	public var npcs:Array<NPC>; 
 
-    public function new(x:Float, y:Float) {
+	public function new(npcs:Array<NPC>, x:Float, y:Float)
+	{
         super(x, y);
+		this.npcs = npcs; 
         loadGraphic("assets/images/bfHead.png", true, 128, 128); 
     }
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
         handleMovement();
+		checkNPCInteraction();
     }
 
     private function handleMovement():Void {
@@ -39,8 +42,26 @@ class Player extends FlxSprite {
             moveY /= length;
         }
 
-        velocity.set(moveX * speed, moveY * speed);
+		velocity.set(moveX * speed, moveY * speed);
+		flipX = (facing == LEFT);
+	}
 
-        flipX = (facing == LEFT);
+	private function checkNPCInteraction():Void
+	{
+		var interactionRange:Float = 50;
+		for (npc in npcs)
+		{
+			var dx:Float = this.x - npc.x;
+			var dy:Float = this.y - npc.y;
+			var distance:Float = Math.sqrt(dx * dx + dy * dy);
+
+			if (distance < interactionRange)
+			{
+				if (FlxG.keys.justPressed.SPACE)
+				{
+					npc.startDialogue();
+				}
+			}
+		}
     }
 }
