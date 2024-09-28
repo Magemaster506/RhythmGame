@@ -55,10 +55,8 @@ class Player extends FlxSprite {
 
 	}
 
-
 	private function checkNPCInteraction():Void
 	{
-
 		for (npc in npcs)
 		{
 			var dx:Float = this.x - npc.x;
@@ -67,14 +65,17 @@ class Player extends FlxSprite {
 
 			if (distance < interactionRange)
 			{
-				// Display interact image?
-				// ...
+				npc.showInteractIndicator();
 
 				// Toggle Dialogue
 				if (FlxG.keys.justPressed.SPACE)
 					npc.startDialogue(this);
 				if (FlxG.keys.justPressed.X)
 					npc.endDialogue(this);
+			}
+			else
+			{
+				npc.hideInteractIndicator();
 			}
 		}
     }
