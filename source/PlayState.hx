@@ -1,6 +1,11 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.util.FlxColor;
+import lime.system.System;
+import openfl.Assets;
+
+using flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState {
     private var player:Player;
@@ -14,6 +19,10 @@ class PlayState extends FlxState {
         background.loadGraphic("assets/images/background.png");
         add(background);
 
+		// Cursor
+		var cursorBitapData = Assets.getBitmapData("assets/images/cursor.png");
+		FlxG.mouse.load(cursorBitapData);
+
         // Player 
         player = new Player(100, 600); 
         add(player);
@@ -21,5 +30,12 @@ class PlayState extends FlxState {
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
+		// Toggle Fullscreen
+		if (FlxG.keys.justPressed.F11)
+			FlxG.fullscreen = !FlxG.fullscreen;
+
+		// Exit Game
+		if (FlxG.keys.justPressed.ESCAPE)
+			System.exit(0);
     }
 }
