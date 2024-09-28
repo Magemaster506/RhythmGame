@@ -8,6 +8,7 @@ import openfl.Assets;
 using flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState {
+	// Allocation
     private var player:Player;
     private var background:FlxSprite;
 
