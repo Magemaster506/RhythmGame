@@ -3,6 +3,7 @@ import flixel.FlxSprite;
 
 class Player extends FlxSprite {
     public var speed:Float = 250; 
+	var interactionRange:Float = 100;
 	public var npcs:Array<NPC>; 
 	public var canMove:Bool = true;
 
@@ -57,7 +58,7 @@ class Player extends FlxSprite {
 
 	private function checkNPCInteraction():Void
 	{
-		var interactionRange:Float = 50;
+
 		for (npc in npcs)
 		{
 			var dx:Float = this.x - npc.x;
@@ -66,6 +67,10 @@ class Player extends FlxSprite {
 
 			if (distance < interactionRange)
 			{
+				// Display interact image?
+				// ...
+
+				// Toggle Dialogue
 				if (FlxG.keys.justPressed.SPACE)
 					npc.startDialogue(this);
 				if (FlxG.keys.justPressed.X)

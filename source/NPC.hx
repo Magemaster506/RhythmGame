@@ -12,6 +12,7 @@ class NPC extends FlxSprite {
         this.dialogue = dialogue;
 		this.imagePath = imagePath;
 		loadGraphic(imagePath);
+
 		// Initializing the dialogue box
 		dialogueBox = new FlxSprite(185, 60);
 		dialogueBox.loadGraphic("assets/images/dialogueBox.png");

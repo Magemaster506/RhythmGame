@@ -35,7 +35,6 @@ class PlayState extends FlxState {
 			add(npc);
 		}
 
-
         // Player 
 		player = new Player(npcs, 100, 600); 
         add(player);

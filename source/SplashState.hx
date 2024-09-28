@@ -26,11 +26,13 @@ class SplashState extends FlxState {
 
         // Fade in
         splashImage.alpha = 0;
-        FlxTween.tween(splashImage, {alpha: 1}, 2, {type: FlxTweenType.ONESHOT});
+		FlxTween.tween(splashImage, {alpha: 1}, 2, {type: FlxTweenType.PERSIST});
+        
 
         // State transition timer
         timer = new FlxTimer();
-        timer.start(3, function(t:FlxTimer):Void {
+		timer.start(3, function(t:FlxTimer):Void
+		{
             FlxG.switchState(new PlayState());
         });
 
