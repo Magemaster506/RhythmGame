@@ -15,8 +15,8 @@ class SplashState extends FlxState {
         super.create();
 
         // Load splash screen file
-        splashImage = new FlxSprite(0, 0);
-		splashImage.loadGraphic("assets/images/other/customSplashScreen");
+		splashImage = new FlxSprite(200, 100);
+		splashImage.loadGraphic("assets/images/other/splashScreenTemp.png");
         splashImage.screenCenter();
         add(splashImage);
 
