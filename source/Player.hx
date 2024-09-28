@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 class Player extends FlxSprite {
     public var speed:Float = 250; 
 	public var npcs:Array<NPC>; 
+	public var canMove:Bool = true;
 
 	public function new(npcs:Array<NPC>, x:Float, y:Float)
 	{
@@ -28,23 +29,31 @@ class Player extends FlxSprite {
         } else if (FlxG.keys.pressed.D) {
             moveX = 1;
             facing = RIGHT;
-        }
-
+		}
         if (FlxG.keys.pressed.W) {
             moveY = -1;
         } else if (FlxG.keys.pressed.S) {
             moveY = 1;
         }
 
-        if (moveX != 0 || moveY != 0) {
-            var length:Float = Math.sqrt(moveX * moveX + moveY * moveY);
-            moveX /= length;
-            moveY /= length;
-        }
+		if (canMove)
+		{
+			if (moveX != 0 || moveY != 0)
+			{
+				var length:Float = Math.sqrt(moveX * moveX + moveY * moveY);
+				moveX /= length;
+				moveY /= length;
+			}
+			velocity.set(moveX * speed, moveY * speed);
+		}
+		else
+		{
+			velocity.set(0, 0);
+		}
 
-		velocity.set(moveX * speed, moveY * speed);
 		flipX = (facing == LEFT);
 	}
+
 
 	private function checkNPCInteraction():Void
 	{
@@ -59,7 +68,7 @@ class Player extends FlxSprite {
 			{
 				if (FlxG.keys.justPressed.SPACE)
 				{
-					npc.startDialogue();
+					npc.startDialogue(this);
 				}
 			}
 		}

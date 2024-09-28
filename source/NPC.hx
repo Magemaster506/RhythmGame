@@ -14,7 +14,8 @@ class NPC extends FlxSprite {
 		loadGraphic(imagePath);
     }
 
-    public function startDialogue(): Void {
-        
+	public function startDialogue(player:Player):Void
+	{
+		player.canMove = false;
     }
 }
