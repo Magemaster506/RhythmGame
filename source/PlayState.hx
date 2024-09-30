@@ -63,7 +63,8 @@ class PlayState extends FlxState {
 
         // Exit Game
         if (FlxG.keys.justPressed.ESCAPE) {
-            System.exit(0);
+			FlxG.switchState(new MainMenuState());
+			// System.exit(0);
         }
 
         // Toggle Pause Menu
@@ -71,7 +72,8 @@ class PlayState extends FlxState {
             togglePause();
         }
 
-        if (!isPaused) {
+		if (player.canMove)
+		{
             player.update(elapsed);
         }
 

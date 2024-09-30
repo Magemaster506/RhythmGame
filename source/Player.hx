@@ -2,7 +2,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 
 class Player extends FlxSprite {
-	public var speed:Float = 250 / 2; 
+	public var speed:Float = 125;
 	var interactionRange:Float = 100;
 	public var npcs:Array<NPC>; 
 	public var canMove:Bool = true;
