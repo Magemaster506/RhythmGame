@@ -13,6 +13,11 @@ class PlayState extends FlxState {
     private var pauseMenu:FlxSprite;
     private var isPaused:Bool = false;
 
+	// Pause menu variables
+	private var targetY:Float;
+	private var easingSpeed:Float = 5;
+	private var isAnimating:Bool = false; 
+
     override public function create():Void {
         super.create();
         
@@ -38,12 +43,14 @@ class PlayState extends FlxState {
         player = new Player(npcs, 100, 600);
         add(player);
 
-        // Pause Menu (offscreen initially)
-        pauseMenu = new FlxSprite(0, -FlxG.height); // Start offscreen at the top left
-        pauseMenu.makeGraphic(Std.int(FlxG.width / 2 - 150), FlxG.height, 0xBA000000); // Semi-transparent black
-        pauseMenu.scrollFactor.set(); // No scrolling
-        pauseMenu.visible = false; // Hidden initially
+		// Pause Menu - Starts offscreen
+		pauseMenu = new FlxSprite(0, -FlxG.height);
+		pauseMenu.loadGraphic("assets/images/other/pauseMenuTemp.png");
+		// pauseMenu.makeGraphic(Std.int(FlxG.width / 2 - 150), FlxG.height, 0xBA000000);
+		pauseMenu.scrollFactor.set();
+		pauseMenu.visible = false; 
         add(pauseMenu);
+		targetY = -FlxG.height; 
     }
 
     override public function update(elapsed:Float):Void {
@@ -64,29 +71,22 @@ class PlayState extends FlxState {
             togglePause();
         }
 
-        // Only update player movement if not paused
         if (!isPaused) {
             player.update(elapsed);
         }
 
-        // Move the pause menu if it's visible
-        if (pauseMenu.visible) {
-            if (isPaused) {
-                // Animate the pause menu downwards
-                if (pauseMenu.y < 0) {
-                    pauseMenu.y += 2000 * elapsed; // Speed of the animation
-                    if (pauseMenu.y >= 0) {
-                        pauseMenu.y = 0; // Snap to target position
-                    }
-                }
-            } else {
-                // Animate the pause menu upwards
-                if (pauseMenu.y > -FlxG.height) {
-                    pauseMenu.y -= 3000 * elapsed; // Speed of the animation
-                    if (pauseMenu.y <= -FlxG.height) {
-                        pauseMenu.y = -FlxG.height; // Snap to target position
-                        pauseMenu.visible = false; // Hide when offscreen
-                    }
+		if (isAnimating)
+		{
+			// Easing function for moving the pause menu
+			pauseMenu.y += (targetY - pauseMenu.y) * easingSpeed * elapsed;
+
+			if (Math.abs(pauseMenu.y - targetY) < 1)
+			{
+				pauseMenu.y = targetY; // Snap to target position
+				if (!isPaused)
+				{
+					pauseMenu.visible = false;
+					isAnimating = false;
                 }
             }
         }
@@ -96,12 +96,13 @@ class PlayState extends FlxState {
         isPaused = !isPaused; // Toggle paused state
 
         if (isPaused) {
-            pauseMenu.visible = true; // Show menu immediately
+			pauseMenu.visible = true;
 			player.canMove = false;
+			targetY = 0; 
         } else {
 			player.canMove = true;
-            // Unpause: Slide the pause menu offscreen upwards
-            // This will be handled in the update function
+			targetY = -FlxG.height; 
         }
+		isAnimating = true; // Start the animation
     }
 }
