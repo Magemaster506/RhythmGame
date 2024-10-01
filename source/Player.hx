@@ -10,7 +10,7 @@ class Player extends FlxSprite {
 	public function new(npcs:Array<NPC>, x:Float, y:Float)
 	{
         super(x, y);
-		this.npcs = npcs; 
+		this.npcs = npcs;
 		loadGraphic("assets/images/characters/bfHead.png", true, 128, 128); 
     }
 

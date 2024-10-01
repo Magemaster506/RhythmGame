@@ -33,7 +33,7 @@ class SplashState extends FlxState {
         timer = new FlxTimer();
 		timer.start(3, function(t:FlxTimer):Void
 		{
-            FlxG.switchState(new PlayState());
+			FlxG.switchState(new MainMenuState());
         });
 
     }

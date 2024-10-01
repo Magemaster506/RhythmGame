@@ -18,7 +18,7 @@ class MainMenuState extends FlxState {
 
         // Create menu option display using FlxText
         for (i in 0...options.length) {
-            var optionText = new FlxText(FlxG.width / 2 - 200, 100 + i * 100, 400, options[i]);
+			var optionText = new FlxText(FlxG.width / 2 - 200, 100 + i * 100, 400, options[i]);
             optionText.setFormat(null, 50, 0xFFFFFF, "center"); // Set font size and color
             optionTexts.push(optionText);
             add(optionText);
