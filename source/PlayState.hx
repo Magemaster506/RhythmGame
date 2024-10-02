@@ -3,6 +3,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import haxe.ds.Option;
 import lime.system.System;
 import openfl.Assets;
 
@@ -23,8 +24,8 @@ class PlayState extends FlxState {
 	private var isAnimating:Bool = false; 
 	private var pauseOptions:Array<FlxSprite>; // Pause menu options
 	private var selectedPauseIndex:Int = 0; // Current selection in pause menu
-	private var optionYOffsets:Array<Float> = [100, 200, 300]; // Y offsets for pause menu options
-	private var optionXOffset:Float = 50; // Horizontal offset relative to pauseMenuBottom
+	private var optionYOffsets:Array<Float> = [230, 330, 430]; // Vertical offsets
+	private var optionXOffsets:Array<Float> = [8, 3, 23]; // Horizontal offsets
 
     override public function create():Void {
         super.create();
@@ -68,25 +69,26 @@ class PlayState extends FlxState {
 		// Pause menu targets
 		targetYBottom = FlxG.height;
 		targetYTop = -FlxG.height; 
-		// Create Pause Menu Options, positioned relative to `pauseMenuBottom`
+		// Create Pause Menu Options
 		pauseOptions = [];
-		var resumeSprite = new FlxSprite(optionXOffset, optionYOffsets[0]).loadGraphic("assets/images/menus/mainmenu/resumeText.png");
-		resumeSprite.visible = false; // Make invisible initially
+		var resumeSprite = new FlxSprite(optionXOffsets[0], optionYOffsets[0]).loadGraphic("assets/images/menus/mainmenu/resumeText.png");
+		resumeSprite.visible = false; 
 		resumeSprite.scale.set(0.8, 0.8);
 		pauseOptions.push(resumeSprite);
 		add(resumeSprite);
 
-		var optionsSprite = new FlxSprite(optionXOffset, optionYOffsets[1]).loadGraphic("assets/images/menus/mainmenu/optionsText.png");
-		optionsSprite.visible = false; // Make invisible initially
-		pauseOptions.push(optionsSprite);
+		var optionsSprite = new FlxSprite(optionXOffsets[1], optionYOffsets[1]).loadGraphic("assets/images/menus/mainmenu/optionsText.png");
+		optionsSprite.visible = false; 
 		optionsSprite.scale.set(0.8, 0.8);
+		pauseOptions.push(optionsSprite);
 		add(optionsSprite);
 
-		var quitSprite = new FlxSprite(optionXOffset, optionYOffsets[2]).loadGraphic("assets/images/menus/mainmenu/quitText.png");
-		quitSprite.visible = false; // Make invisible initially
-		pauseOptions.push(quitSprite);
+		var quitSprite = new FlxSprite(optionXOffsets[2], optionYOffsets[2]).loadGraphic("assets/images/menus/mainmenu/quitText.png");
+		quitSprite.visible = false; 
 		quitSprite.scale.set(0.8, 0.8);
+		pauseOptions.push(quitSprite);
 		add(quitSprite);
+
 
 		updatePauseMenuGraphics();
     }
@@ -146,7 +148,6 @@ class PlayState extends FlxState {
 			for (i in 0...pauseOptions.length)
 			{
 				pauseOptions[i].y = pauseMenuBottom.y + optionYOffsets[i];
-				pauseOptions[i].x = optionXOffset; // Fixed X offset
 			}
 
 			if (Math.abs(pauseMenuBottom.y - targetYBottom) < 1 && Math.abs(pauseMenuTop.y - targetYTop) < 1)
@@ -204,31 +205,34 @@ class PlayState extends FlxState {
 	{
 		var centerY:Float = FlxG.height / 2 - 50; // The selected option should move here
 		var offset:Float = 120; // Space between each option
-
+		var selectedOffsetX:Float = 15; // X offset for the selected option (amount to move to the right)
 		for (i in 0...pauseOptions.length)
 		{
 			var targetY:Float;
-
+			var targetX:Float = optionXOffsets[i]; // Start with the initial X position
 			if (i < selectedPauseIndex)
 			{
 				targetY = centerY - offset * (selectedPauseIndex - i); // Move options above the selected one
+				// Keep the original X position
 			}
 			else if (i == selectedPauseIndex)
 			{
 				targetY = centerY; // Center the selected option
+				targetX += selectedOffsetX; // Move selected option to the right by adding offset
 			}
 			else
 			{
 				targetY = centerY + offset * (i - selectedPauseIndex); // Move options below the selected one
 			}
 
-			// Use FlxTween to smoothly animate the y position with easing
-			FlxTween.tween(pauseOptions[i], {y: targetY}, 0.3, {ease: FlxEase.expoOut});
+			// Animate the y and x position with easing
+			FlxTween.tween(pauseOptions[i], {y: targetY, x: targetX}, 0.3, {ease: FlxEase.expoOut});
 
-			// Adjust alpha to highlight the selected option
+			// Adjust alpha to show the selected option
 			pauseOptions[i].alpha = (i == selectedPauseIndex) ? 1 : 0.5;
 		}
 	}
+
 
 	private function selectPauseOption():Void
 	{
