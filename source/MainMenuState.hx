@@ -25,17 +25,17 @@ class MainMenuState extends FlxState {
 		add(background);
 
 		// Create and add each menu option as an image
-		var playSprite = new FlxSprite(0, optionYOffsets[0]).loadGraphic("assets/images/menus/mainmenu/playText.png");
+		var playSprite = new FlxSprite(0, optionYOffsets[0]).loadGraphic("assets/images/menus/text/playUnselected.png");
 		playSprite.x = (FlxG.width - playSprite.width) / 2 - 20;
 		options.push(playSprite);
 		add(playSprite);
 
-		var optionsSprite = new FlxSprite(0, optionYOffsets[1]).loadGraphic("assets/images/menus/mainmenu/optionsText.png");
+		var optionsSprite = new FlxSprite(0, optionYOffsets[1]).loadGraphic("assets/images/menus/text/optionsUnselected.png");
 		optionsSprite.x = (FlxG.width - optionsSprite.width) / 2 - 20;
 		options.push(optionsSprite);
 		add(optionsSprite);
 
-		var exitSprite = new FlxSprite(0, optionYOffsets[2]).loadGraphic("assets/images/menus/mainmenu/quitText.png");
+		var exitSprite = new FlxSprite(0, optionYOffsets[2]).loadGraphic("assets/images/menus/text/quitUnselected.png");
 		exitSprite.x = (FlxG.width - exitSprite.width) / 2 - 20;
 		options.push(exitSprite);
 		add(exitSprite);
