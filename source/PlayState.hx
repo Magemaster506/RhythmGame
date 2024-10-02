@@ -47,7 +47,7 @@ class PlayState extends FlxState {
 
 		// Left Pause Menu
 		pauseMenuBottom = new FlxSprite(0, FlxG.height);
-		pauseMenuBottom.loadGraphic("assets/images/menus/pauseMenuLeft.png");
+		pauseMenuBottom.loadGraphic("assets/images/menus/leftMenu0001.png");
 		pauseMenuBottom.scrollFactor.set();
 		pauseMenuBottom.visible = false;
 		add(pauseMenuBottom);
