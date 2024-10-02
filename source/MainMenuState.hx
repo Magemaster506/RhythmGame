@@ -62,6 +62,10 @@ class MainMenuState extends FlxState {
 		{
 			selectOption();
 		}
+		if (FlxG.keys.justPressed.F)
+		{
+			FlxG.fullscreen = !FlxG.fullscreen;
+		}
 	}
 
 	private function updateMenuGraphics():Void
@@ -106,5 +110,6 @@ class MainMenuState extends FlxState {
 			case 2: // Quit
 				System.exit(0);
 		}
+
 	}
 }

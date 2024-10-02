@@ -24,8 +24,8 @@ class PlayState extends FlxState {
 	private var isAnimating:Bool = false; 
 	private var pauseOptions:Array<FlxSprite>; // Pause menu options
 	private var selectedPauseIndex:Int = 0; // Current selection in pause menu
-	private var optionYOffsets:Array<Float> = [230, 330, 430]; // Vertical offsets
-	private var optionXOffsets:Array<Float> = [8, 3, 23]; // Horizontal offsets
+	private var optionYOffsets:Array<Float> = [230, 330, 430, 530]; // Vertical offsets
+	private var optionXOffsets:Array<Float> = [8, 3, 0, 23]; // Horizontal offsets
 
     override public function create():Void {
         super.create();
@@ -83,7 +83,13 @@ class PlayState extends FlxState {
 		pauseOptions.push(optionsSprite);
 		add(optionsSprite);
 
-		var quitSprite = new FlxSprite(optionXOffsets[2], optionYOffsets[2]).loadGraphic("assets/images/menus/mainmenu/quitText.png");
+		var mainmenuSprite = new FlxSprite(optionXOffsets[2], optionYOffsets[2]).loadGraphic("assets/images/menus/mainmenu/mainmenuText.png");
+		mainmenuSprite.visible = false;
+		mainmenuSprite.scale.set(0.8, 0.8);
+		pauseOptions.push(mainmenuSprite);
+		add(mainmenuSprite);
+
+		var quitSprite = new FlxSprite(optionXOffsets[3], optionYOffsets[3]).loadGraphic("assets/images/menus/mainmenu/quitText.png");
 		quitSprite.visible = false; 
 		quitSprite.scale.set(0.8, 0.8);
 		pauseOptions.push(quitSprite);
@@ -98,7 +104,7 @@ class PlayState extends FlxState {
 		super.update(elapsed);
 
 		// Toggle Fullscreen
-		if (FlxG.keys.justPressed.F11)
+		if (FlxG.keys.justPressed.F)
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
@@ -236,13 +242,16 @@ class PlayState extends FlxState {
 
 	private function selectPauseOption():Void
 	{
+		// Cases for pause menu
 		switch (selectedPauseIndex)
 		{
 			case 0: // Resume
 				togglePause();
 			case 1: // Options
 				// Handle pause menu options
-			case 2: // Quit
+			case 2: // Main Menu
+				FlxG.switchState(new MainMenuState());
+			case 3: // Quit
 				System.exit(0);
 		}
 	}
