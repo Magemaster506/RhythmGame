@@ -44,7 +44,7 @@ class NPC extends FlxSprite {
 		FlxG.state.add(dialogueBox);
 
 		// Initializing the text field for dialogue
-		dialogueText = new FlxText(195, 70, 200, "");
+		dialogueText = new FlxText(175, 70, 600, "");
 		dialogueText.setFormat(null, 20, 0x181818, "left");
 		dialogueText.visible = false;
 		FlxG.state.add(dialogueText);

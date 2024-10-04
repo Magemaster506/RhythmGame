@@ -1,126 +1,175 @@
+package;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import lime.system.System;
 
-class MainMenuState extends FlxState {
-	private var options:Array<FlxSprite>;
-	private var selectedIndex:Int = 0;
+class MainMenuState extends FlxState
+{
+    private var options:Array<FlxSprite>;
 	private var background:FlxSprite;
-	private var optionYOffsets:Array<Float>;
+    private var selectedIndex:Int = 0;
+    private var animationTimer:Float = 0;
+    private var animationSpeed:Float = 0.2; // Time between frame changes
 
-	override public function create():Void
-	{
-		super.create();
+    private var optionFrames:Array<Array<String>> = [
+        [
+            "assets/images/menus/text/playUnselected.png",
+            "assets/images/menus/text/playSelected1.png",
+            "assets/images/menus/text/playSelected2.png"
+        ],
+        [
+            "assets/images/menus/text/optionsUnselected.png",
+            "assets/images/menus/text/optionsSelected1.png",
+            "assets/images/menus/text/optionsSelected2.png"
+        ],
+        [
+            "assets/images/menus/text/quitUnselected.png",
+            "assets/images/menus/text/quitSelected1.png",
+            "assets/images/menus/text/quitSelected2.png"
+        ]
+    ];
 
-		// Initialize menu options and their y-offsets
-		options = [];
-		optionYOffsets = [100, 200, 300]; // Default y positions for the options
+    override public function create():Void
+    {
 
-		// Load background
 		background = new FlxSprite(0, 0);
 		background.loadGraphic("assets/images/menus/mainmenu/mainMenuBackground.png");
 		add(background);
 
-		// Create and add each menu option as an image
-		var playSprite = new FlxSprite(0, optionYOffsets[0]).loadGraphic("assets/images/menus/text/playUnselected.png");
-		playSprite.x = (FlxG.width - playSprite.width) / 2 - 20;
-		options.push(playSprite);
-		add(playSprite);
+        // Add options to the menu
+        options = [];
+        var centerY:Float = FlxG.height / 2 - 50;
+        var offset:Float = 120;
 
-		var optionsSprite = new FlxSprite(0, optionYOffsets[1]).loadGraphic("assets/images/menus/text/optionsUnselected.png");
-		optionsSprite.x = (FlxG.width - optionsSprite.width) / 2 - 20;
-		options.push(optionsSprite);
-		add(optionsSprite);
+        for (i in 0...optionFrames.length)
+        {
+            var option:FlxSprite = new FlxSprite();
+            option.loadGraphic(optionFrames[i][0]); // Set the unselected frame initially
+            option.screenCenter();
+            option.y = centerY + offset * i;
+            option.alpha = (i == selectedIndex) ? 1 : 0.8;
+            options.push(option);
+            add(option);
+        }
 
-		var exitSprite = new FlxSprite(0, optionYOffsets[2]).loadGraphic("assets/images/menus/text/quitUnselected.png");
-		exitSprite.x = (FlxG.width - exitSprite.width) / 2 - 20;
-		options.push(exitSprite);
-		add(exitSprite);
+        // Update the initial menu graphics
+        updateMenuGraphics();
+    }
 
-		updateMenuGraphics();
-	}
+    override public function update(elapsed:Float):Void
+    {
+        super.update(elapsed);
 
-	override public function update(elapsed:Float):Void
-	{
-		super.update(elapsed);
+        animationTimer += elapsed;
+        if (animationTimer >= animationSpeed)
+        {
+            toggleSelectedOptionFrame();
+            animationTimer = 0;
+        }
 
-		// Navigate through menu options
-		if (FlxG.keys.justPressed.W)
-		{
-			selectedIndex = (selectedIndex - 1 + options.length) % options.length;
-			updateMenuGraphics();
-		}
-		if (FlxG.keys.justPressed.S)
-		{
-			selectedIndex = (selectedIndex + 1) % options.length;
-			updateMenuGraphics();
-		}
-		if (FlxG.keys.justPressed.ENTER)
-		{
-			selectOption();
-		}
-		if (FlxG.keys.justPressed.F)
-		{
-			FlxG.fullscreen = !FlxG.fullscreen;
-		}
-	}
+        // Navigate through menu options
+        if (FlxG.keys.justPressed.W)
+        {
+            selectedIndex = (selectedIndex - 1 + options.length) % options.length;
+            updateMenuGraphics();
+        }
+        if (FlxG.keys.justPressed.S)
+        {
+            selectedIndex = (selectedIndex + 1) % options.length;
+            updateMenuGraphics();
+        }
+        if (FlxG.keys.justPressed.ENTER)
+        {
+            selectOption();
+        }
+        if (FlxG.keys.justPressed.F)
+        {
+            FlxG.fullscreen = !FlxG.fullscreen;
+        }
+    }
 
-	private function updateMenuGraphics():Void
-	{
-		var centerY:Float = FlxG.height / 2 - 50; // The selected option should move here
-		var offset:Float = 120; // Space between each option
-		var selectedOffsetX:Float = 15; // X offset for the selected option
-		for (i in 0...options.length)
-		{
-			var targetY:Float;
-			var targetX:Float = (FlxG.width - options[i].width) / 2 - 20; // Initial X position
+    private function toggleSelectedOptionFrame():Void
+    {
+        var currentFrame = options[selectedIndex].graphic.key;
+        var frameToSwitch:String;
 
-			// Update the graphic for the selected option
-			if (i == selectedIndex)
-			{
-				options[i].loadGraphic("assets/images/menus/text/playSelected.png"); // Update with selected graphic
-				targetX += selectedOffsetX; // Move selected option to the right
-			}
-			else
-			{
-				options[i].loadGraphic("assets/images/menus/text/playUnselected.png"); // Default unselected graphic
-			}
-			if (i < selectedIndex)
-			{
-				targetY = centerY - offset * (selectedIndex - i); // Move options above the selected one
-			}
-			else if (i == selectedIndex)
-			{
-				targetY = centerY; // Center the selected option
-			}
-			else
-			{
-				targetY = centerY + offset * (i - selectedIndex); // Move options below the selected one
-			}
-		
-			// Tween the Y and X positions with easing for smooth movement
-			FlxTween.tween(options[i], {y: targetY, x: targetX}, 0.3, {ease: FlxEase.expoOut});
+        // Switch between the two selected frames
+        if (currentFrame == optionFrames[selectedIndex][1])
+        {
+            frameToSwitch = optionFrames[selectedIndex][2];
+        }
+        else
+        {
+            frameToSwitch = optionFrames[selectedIndex][1];
+        }
 
-			// Adjust alpha to highlight the selected option
-			options[i].alpha = (i == selectedIndex) ? 1 : 0.8;
-		}
-	}
+        options[selectedIndex].loadGraphic(frameToSwitch);
+    }
 
+    private function updateMenuGraphics():Void
+    {
+        var centerY:Float = FlxG.height / 2 - 50;
+        var offset:Float = 120;
 
-	private function selectOption():Void
-	{
-		switch (selectedIndex)
-		{
-			case 0: // Play
-				FlxG.switchState(new PlayState());
-			case 1: // Options
-				// Handle options
-			case 2: // Quit
+        // Reset the animation timer when a new option is selected
+        animationTimer = 0;
+
+        for (i in 0...options.length)
+        {
+            var targetY:Float;
+
+            // Update the graphic based on whether the option is selected
+            if (i == selectedIndex)
+            {
+                options[i].loadGraphic(optionFrames[i][1]); // Set to the first selected frame immediately
+
+            }
+            else
+            {
+                options[i].loadGraphic(optionFrames[i][0]); // Set to unselected frame
+            }
+
+            // Calculate Y position
+            if (i < selectedIndex)
+            {
+                targetY = centerY - offset * (selectedIndex - i);
+            }
+            else if (i == selectedIndex)
+            {
+                targetY = centerY;
+            }
+            else
+            {
+                targetY = centerY + offset * (i - selectedIndex);
+            }
+
+            // Tween the Y and X positions with easing
+            FlxTween.tween(options[i], {y: targetY}, 0.3, {ease: FlxEase.expoOut});
+
+            // Adjust alpha to highlight the selected option
+            options[i].alpha = (i == selectedIndex) ? 1 : 0.8;
+        }
+    }
+
+    private function selectOption():Void
+    {
+        switch (selectedIndex)
+        {
+            case 0:
+                // Handle "Play"
+                FlxG.switchState(new PlayState());
+            case 1:
+                // Handle "Options"
+                trace("Options selected");
+            case 2:
+                // Handle "Quit"
 				System.exit(0);
-		}
-
-	}
+        }
+    }
 }
