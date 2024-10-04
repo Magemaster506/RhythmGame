@@ -11,7 +11,14 @@ class NPC extends FlxSprite {
 	var currentCharIndex:Int = 0;
 	var typewriterSpeed:Float = 0.05; // Time interval between each character
 	var typewriterTimer:Float = 0; // Tracks time passed between characters
-	var isTyping:Bool = false;
+	public var isTyping:Bool = false;
+	public var isDialogueActive:Bool = false;
+
+	// Frame management
+	private var dialogueFrames:Array<String>;
+	private var currentFrameIndex:Int = 0;
+	private var frameChangeTimer:Float = 0; // Timer to manage frame changes
+	private var frameChangeSpeed:Float = 0.04; // Time between frames
 
 	public function new(x:Float, y:Float, dialogue:String, imagePath:String)
 	{
@@ -20,15 +27,25 @@ class NPC extends FlxSprite {
 		this.imagePath = imagePath;
 		loadGraphic(imagePath);
 
+		// Initialize dialogue frames
+		dialogueFrames = [
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0001.png",
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0002.png",
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0003.png",
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0004.png",
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0005.png",
+			"assets/images/shared/dialogueBox/dialogueBoxAnimation0006.png"
+		];
+
 		// Initializing the dialogue box
-		dialogueBox = new FlxSprite(185, 60);
-		dialogueBox.loadGraphic("assets/images/dialogueBox.png");
+		dialogueBox = new FlxSprite(100, 50);
+		dialogueBox.loadGraphic(dialogueFrames[0], true, 760, 171); // Load the first frame
 		dialogueBox.visible = false;
 		FlxG.state.add(dialogueBox);
 
 		// Initializing the text field for dialogue
 		dialogueText = new FlxText(195, 70, 200, "");
-		dialogueText.setFormat(null, 20, 0xFFFFFF, "left");
+		dialogueText.setFormat(null, 20, 0x181818, "left");
 		dialogueText.visible = false;
 		FlxG.state.add(dialogueText);
 
@@ -42,6 +59,23 @@ class NPC extends FlxSprite {
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
+		// Update the dialogue box frame based on the timer
+		if (isDialogueActive)
+		{
+			frameChangeTimer += elapsed;
+
+			// Check if the current frame index is less than the length of dialogueFrames - 1
+			if (currentFrameIndex < dialogueFrames.length - 1)
+			{
+				if (frameChangeTimer >= frameChangeSpeed)
+				{
+					currentFrameIndex++;
+					dialogueBox.loadGraphic(dialogueFrames[currentFrameIndex], true, 760, 171);
+					frameChangeTimer = 0; // Reset the timer
+				}
+			}
+		}
 		
 		// Handle the typewriter effect
 		if (isTyping)
@@ -76,21 +110,27 @@ class NPC extends FlxSprite {
 
 	public function startDialogue(player:Player):Void
 	{
-		player.canMove = false;
-		dialogueBox.visible = true;
-		dialogueText.visible = true;
-		dialogueText.text = ""; // Reset the dialogue text
-		currentCharIndex = 0;
-		typewriterTimer = 0;
-		isTyping = true;
-		hideInteractIndicator();
+		if (!isDialogueActive)
+		{
+			player.canMove = false;
+			dialogueBox.visible = true;
+			currentFrameIndex = 0; // Reset frame index to start from the first frame
+			dialogueBox.loadGraphic(dialogueFrames[currentFrameIndex], true, 760, 171); // Load the first frame
+			dialogueText.visible = true;
+			dialogueText.text = ""; // Reset the dialogue text
+			currentCharIndex = 0;
+			typewriterTimer = 0;
+			isTyping = true;
+			isDialogueActive = true; // Set the dialogue as active
+			hideInteractIndicator();
+		}
 	}
-
 	public function endDialogue(player:Player):Void
 	{
 		player.canMove = true;
 		dialogueBox.visible = false;
 		dialogueText.visible = false;
 		isTyping = false;
+		isDialogueActive = false; // Set the dialogue as inactive
 	}
 }

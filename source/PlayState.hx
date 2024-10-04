@@ -42,12 +42,12 @@ class PlayState extends FlxState {
         add(background);
 
         // Cursor
-        var cursorBitmapData = Assets.getBitmapData("assets/images/cursorDot.png");
+		var cursorBitmapData = Assets.getBitmapData("assets/images/shared/cursorDot.png");
         FlxG.mouse.load(cursorBitmapData);
 
         // Initialize NPCs
         npcs = [];
-        var npc1 = new NPC(400, 650, "Hello!", "assets/images/characters/smallDuck.png");
+		var npc1 = new NPC(400, 650, "Hello!", "assets/images/characters/smallDuck.png");
         npcs.push(npc1);
 
         for (npc in npcs) {
@@ -128,12 +128,6 @@ class PlayState extends FlxState {
 		if (FlxG.keys.justPressed.F)
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
-		}
-
-		// Exit Game
-		if (FlxG.keys.justPressed.ESCAPE)
-		{
-			System.exit(0);
 		}
 
 		// Toggle Pause Menu

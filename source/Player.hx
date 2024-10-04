@@ -6,6 +6,7 @@ class Player extends FlxSprite {
 	var interactionRange:Float = 100;
 	public var npcs:Array<NPC>; 
 	public var canMove:Bool = true;
+	private var dialogueCooldown:Bool = false;
 
 	public function new(npcs:Array<NPC>, x:Float, y:Float)
 	{
@@ -67,16 +68,30 @@ class Player extends FlxSprite {
 			{
 				npc.showInteractIndicator();
 
-				// Toggle Dialogue
-				if (FlxG.keys.justPressed.SPACE)
-					npc.startDialogue(this);
-				if (FlxG.keys.justPressed.X)
-					npc.endDialogue(this);
+				// Use SPACE to toggle between starting and ending dialogue
+				if (FlxG.keys.justPressed.SPACE && !dialogueCooldown)
+				{
+					if (npc.isDialogueActive)
+					{
+						npc.endDialogue(this);
+					}
+					else
+					{
+						npc.startDialogue(this);
+					}
+
+					// Activate the cooldown to prevent immediate toggling
+					dialogueCooldown = true;
+				}
 			}
 			else
 			{
 				npc.hideInteractIndicator();
 			}
 		}
-    }
+		if (FlxG.keys.justReleased.SPACE)
+		{
+			dialogueCooldown = false;
+		}
+	}
 }

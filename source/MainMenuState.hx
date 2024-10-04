@@ -70,14 +70,24 @@ class MainMenuState extends FlxState {
 
 	private function updateMenuGraphics():Void
 	{
-		// Calculate target y positions for all options based on the selected one
 		var centerY:Float = FlxG.height / 2 - 50; // The selected option should move here
 		var offset:Float = 120; // Space between each option
-
+		var selectedOffsetX:Float = 15; // X offset for the selected option
 		for (i in 0...options.length)
 		{
 			var targetY:Float;
+			var targetX:Float = (FlxG.width - options[i].width) / 2 - 20; // Initial X position
 
+			// Update the graphic for the selected option
+			if (i == selectedIndex)
+			{
+				options[i].loadGraphic("assets/images/menus/text/playSelected.png"); // Update with selected graphic
+				targetX += selectedOffsetX; // Move selected option to the right
+			}
+			else
+			{
+				options[i].loadGraphic("assets/images/menus/text/playUnselected.png"); // Default unselected graphic
+			}
 			if (i < selectedIndex)
 			{
 				targetY = centerY - offset * (selectedIndex - i); // Move options above the selected one
@@ -90,14 +100,15 @@ class MainMenuState extends FlxState {
 			{
 				targetY = centerY + offset * (i - selectedIndex); // Move options below the selected one
 			}
-
-			// Use FlxTween to smoothly animate the y position with easing
-			FlxTween.tween(options[i], {y: targetY}, 0.3, {ease: FlxEase.expoOut});
+		
+			// Tween the Y and X positions with easing for smooth movement
+			FlxTween.tween(options[i], {y: targetY, x: targetX}, 0.3, {ease: FlxEase.expoOut});
 
 			// Adjust alpha to highlight the selected option
-			options[i].alpha = (i == selectedIndex) ? 1 : 0.5;
+			options[i].alpha = (i == selectedIndex) ? 1 : 0.8;
 		}
 	}
+
 
 	private function selectOption():Void
 	{
