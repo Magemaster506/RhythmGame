@@ -16,14 +16,22 @@ class NPC extends FlxSprite {
 
 	// Frame management
 	private var dialogueFrames:Array<String>;
-	private var currentFrameIndex:Int = 0;
-	private var frameChangeTimer:Float = 0; // Timer to manage frame changes
+	private var interactionMarkerFrames:Array<String>;
+
+	// Separate frame management for dialogue and interaction marker
+	private var dialogueFrameIndex:Int = 0;
+	private var interactionFrameIndex:Int = 0;
+
+	// Separate timers for dialogue and interaction marker
+	private var dialogueFrameTimer:Float = 0;
+	private var interactionFrameTimer:Float = 0;
+
 	private var frameChangeSpeed:Float = 0.04; // Time between frames
 
 	public function new(x:Float, y:Float, dialogue:String, imagePath:String)
 	{
-        super(x, y);
-        this.dialogue = dialogue;
+		super(x, y);
+		this.dialogue = dialogue;
 		this.imagePath = imagePath;
 		loadGraphic(imagePath);
 
@@ -50,8 +58,19 @@ class NPC extends FlxSprite {
 		FlxG.state.add(dialogueText);
 
 		// Initializing the indicator sprite
+		interactionMarkerFrames = [
+			"assets/images/characters/ui/interactionMarker0001.png",
+			"assets/images/characters/ui/interactionMarker0002.png",
+			"assets/images/characters/ui/interactionMarker0003.png",
+			"assets/images/characters/ui/interactionMarker0004.png",
+			"assets/images/characters/ui/interactionMarker0005.png",
+			"assets/images/characters/ui/interactionMarker0006.png",
+			"assets/images/characters/ui/interactionMarker0007.png",
+			"assets/images/characters/ui/interactionMarker0008.png",
+			"assets/images/characters/ui/interactionMarker0009.png"
+		];
 		interactIndicator = new FlxSprite(x, y);
-		interactIndicator.loadGraphic("assets/images/cursorDot.png");
+		interactIndicator.loadGraphic(interactionMarkerFrames[0], true, 17, 37);
 		interactIndicator.visible = false;
 		FlxG.state.add(interactIndicator);
 	}
@@ -59,24 +78,29 @@ class NPC extends FlxSprite {
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		
-		// Update the dialogue box frame based on the timer
+
+		// Update the dialogue box frame based on its own timer
 		if (isDialogueActive)
 		{
-			frameChangeTimer += elapsed;
+			dialogueFrameTimer += elapsed;
 
 			// Check if the current frame index is less than the length of dialogueFrames - 1
-			if (currentFrameIndex < dialogueFrames.length - 1)
+			if (dialogueFrameIndex < dialogueFrames.length - 1 && dialogueFrameTimer >= frameChangeSpeed)
 			{
-				if (frameChangeTimer >= frameChangeSpeed)
-				{
-					currentFrameIndex++;
-					dialogueBox.loadGraphic(dialogueFrames[currentFrameIndex], true, 760, 171);
-					frameChangeTimer = 0; // Reset the timer
-				}
+				dialogueFrameIndex++;
+				dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 760, 171);
+				dialogueFrameTimer = 0; // Reset the timer
 			}
 		}
-		
+		// Update the interaction marker animation and loop it based on its own timer
+		interactionFrameTimer += elapsed;
+		if (interactionFrameTimer >= frameChangeSpeed)
+		{
+			interactionFrameIndex = (interactionFrameIndex + 1) % interactionMarkerFrames.length;
+			interactIndicator.loadGraphic(interactionMarkerFrames[interactionFrameIndex], true, 17, 37);
+			interactionFrameTimer = 0; // Reset the timer
+		}
+
 		// Handle the typewriter effect
 		if (isTyping)
 		{
@@ -114,8 +138,8 @@ class NPC extends FlxSprite {
 		{
 			player.canMove = false;
 			dialogueBox.visible = true;
-			currentFrameIndex = 0; // Reset frame index to start from the first frame
-			dialogueBox.loadGraphic(dialogueFrames[currentFrameIndex], true, 760, 171); // Load the first frame
+			dialogueFrameIndex = 0; // Reset frame index to start from the first frame
+			dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 760, 171); // Load the first frame
 			dialogueText.visible = true;
 			dialogueText.text = ""; // Reset the dialogue text
 			currentCharIndex = 0;
