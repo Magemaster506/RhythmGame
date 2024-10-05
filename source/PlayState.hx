@@ -1,8 +1,10 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
 import haxe.ds.Option;
 import lime.system.System;
 import openfl.Assets;
@@ -31,6 +33,9 @@ class PlayState extends FlxState {
 
 	private var pauseOptions:Array<FlxSprite> = [];
 	private var optionFrames:Array<Array<String>> = [];
+
+	// quests
+	private var questList:FlxText;
 
 
     override public function create():Void {
@@ -74,6 +79,13 @@ class PlayState extends FlxState {
 		// Pause menu targets
 		targetYBottom = FlxG.height;
 		targetYTop = -FlxG.height; 
+
+		// Initialize the quest list (placeholder for now)
+		questList = new FlxText(FlxG.width / 2 + 50, 100, 400, "No quests yet");
+		questList.scrollFactor.set();
+		questList.setFormat(null, 16, FlxColor.WHITE);
+		questList.visible = false; // Initially hidden
+		add(questList);
 
 		optionFrames = [
 			[
@@ -201,6 +213,7 @@ class PlayState extends FlxState {
 			// Show menus and options, start animating
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
+			questList.visible = true; // Show the quest list
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -221,6 +234,7 @@ class PlayState extends FlxState {
 			// Move pause menus back off-screen
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
+			questList.visible = false;
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -309,5 +323,14 @@ class PlayState extends FlxState {
 			case 3: // Quit
 				System.exit(0);
 		}
+	}
+	private function updateQuestList(quests:Array<String>):Void
+	{
+		var questText:String = "";
+		for (quest in quests)
+		{
+			questText += "- " + quest + "\n";
+		}
+		questList.text = questText;
 	}
 }
