@@ -1,8 +1,5 @@
 import flixel.FlxG;
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxSprite;
-import flixel.text.FlxText;
 import flixel.text.FlxText;
 
 class NPC extends FlxSprite {

@@ -4,8 +4,6 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.util.FlxColor;
-import haxe.ds.Option;
 import lime.system.System;
 import openfl.Assets;
 
