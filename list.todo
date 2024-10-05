@@ -1,0 +1,19 @@
+
+programming:
+    dialogue:
+        ☐ Update NPC dialogue during runtime when event is called
+        ☐ Opening and closing the pause menu during dialogue allows the player to start moving
+        ☐ Reverse the dialogue box animation when closing dialogue
+        quests:
+            ☐ Assign quest during or after dialogue
+    pauseMenu:
+        quests:
+            ☐ Array for holding and displaying current quests
+            ☐ Do something with completed quests
+
+art:
+    quests:
+        ☐ Assigned quest popup
+    pauseMenu:
+        quests:
+            ☐ Box for displaying quests assigned and completed quests in the pause menu

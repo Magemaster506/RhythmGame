@@ -35,7 +35,7 @@ class PlayState extends FlxState {
 	private var optionFrames:Array<Array<String>> = [];
 
 	// quests
-	private var questList:FlxText;
+	private var noQuestsImage:FlxSprite;
 
 
     override public function create():Void {
@@ -53,7 +53,9 @@ class PlayState extends FlxState {
         // Initialize NPCs
         npcs = [];
 		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third line", "The fourth and final string"], "assets/images/characters/smallDuck.png");
+		npcs.push(npc1);
 
+		var npc1 = new NPC(600, 650, ["LINE 1", "LINE 2", "LINE 3", "LINE 4"], "assets/images/characters/bfHead.png");
         npcs.push(npc1);
 
         for (npc in npcs) {
@@ -81,12 +83,12 @@ class PlayState extends FlxState {
 		targetYBottom = FlxG.height;
 		targetYTop = -FlxG.height; 
 
-		// Initialize the quest list (placeholder for now)
-		questList = new FlxText(FlxG.width / 2 + 50, 100, 400, "No quests yet");
-		questList.scrollFactor.set();
-		questList.setFormat(null, 16, FlxColor.WHITE);
-		questList.visible = false; // Initially hidden
-		add(questList);
+		// Initialize the no quests image
+		noQuestsImage = new FlxText(FlxG.width / 2 + 50, 100);
+		noQuestsImage.loadGraphic("assets/images/menus/noQuests.png");
+		noQuestsImage.scrollFactor.set();
+		noQuestsImage.visible = false; // Initially hidden
+		add(noQuestsImage);
 
 		optionFrames = [
 			[
@@ -183,27 +185,31 @@ class PlayState extends FlxState {
 			{
 				pauseOptions[i].y = pauseMenuBottom.y + optionYOffsets[i];
 			}
-
+			
+			// Update the position of noQuestsImage relative to pauseMenuTop
+			noQuestsImage.y = pauseMenuTop.y + 100; // Adjust 100 to match the intended offset
+			
 			if (Math.abs(pauseMenuBottom.y - targetYBottom) < 1 && Math.abs(pauseMenuTop.y - targetYTop) < 1)
 			{
 				// Snap to target positions
 				pauseMenuBottom.y = targetYBottom;
 				pauseMenuTop.y = targetYTop;
-
+				noQuestsImage.y = pauseMenuTop.y + 100; // Final adjustment when snapping
 				if (!isPaused)
 				{
 					pauseMenuBottom.visible = false;
 					pauseMenuTop.visible = false;
+					noQuestsImage.visible = false;
 					// Hide options when unpaused
 					for (option in pauseOptions)
 					{
 						option.visible = false;
 					}
-	
 					isAnimating = false;
 				}
 			}
 		}
+
 	}
 
 	private function togglePause():Void
@@ -214,7 +220,7 @@ class PlayState extends FlxState {
 			// Show menus and options, start animating
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
-			questList.visible = true; // Show the quest list
+			noQuestsImage.visible = true; // Show the quest list
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -235,7 +241,7 @@ class PlayState extends FlxState {
 			// Move pause menus back off-screen
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
-			questList.visible = false;
+			noQuestsImage.visible = false;
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -332,6 +338,5 @@ class PlayState extends FlxState {
 		{
 			questText += "- " + quest + "\n";
 		}
-		questList.text = questText;
 	}
 }
