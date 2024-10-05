@@ -2,23 +2,26 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 
 class Player extends FlxSprite {
-	public var speed:Float = 125;
-	var interactionRange:Float = 100;
-	public var npcs:Array<NPC>; 
-	public var canMove:Bool = true;
-	private var dialogueCooldown:Bool = false;
+    public var speed:Float = 125;
+    var interactionRange:Float = 100;
+    public var npcs:Array<NPC>; 
+    public var canMove:Bool = true;
+    private var dialogueCooldown:Bool = false;
+    private var dialogueCooldownTime:Float = 1.5; // 0.5 seconds cooldown
+    public var lastDialogueToggleTime:Float = 0; // Timer for last toggle
 
-	public function new(npcs:Array<NPC>, x:Float, y:Float)
-	{
+    public function new(npcs:Array<NPC>, x:Float, y:Float)
+    {
         super(x, y);
-		this.npcs = npcs;
-		loadGraphic("assets/images/characters/bfHead.png", true, 128, 128); 
+        this.npcs = npcs;
+        loadGraphic("assets/images/characters/bfHead.png", true, 128, 128); 
     }
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
+        lastDialogueToggleTime += elapsed; // Update the timer
         handleMovement();
-		checkNPCInteraction();
+        checkNPCInteraction();
     }
 
     private function handleMovement():Void {
@@ -31,78 +34,86 @@ class Player extends FlxSprite {
         } else if (FlxG.keys.pressed.D) {
             moveX = 1;
             facing = RIGHT;
-		}
+        }
         if (FlxG.keys.pressed.W) {
             moveY = -1;
         } else if (FlxG.keys.pressed.S) {
             moveY = 1;
         }
 
-		if (canMove)
-		{
-			if (moveX != 0 || moveY != 0)
-			{
-				var length:Float = Math.sqrt(moveX * moveX + moveY * moveY);
-				moveX /= length;
-				moveY /= length;
-			}
-			velocity.set(moveX * speed, moveY * speed);
-			flipX = (facing == LEFT);
-		}
-		else
-		{
-			velocity.set(0, 0);
-		}
-
-	}
+        if (canMove)
+        {
+            if (moveX != 0 || moveY != 0)
+            {
+                var length:Float = Math.sqrt(moveX * moveX + moveY * moveY);
+                moveX /= length;
+                moveY /= length;
+            }
+            velocity.set(moveX * speed, moveY * speed);
+            flipX = (facing == LEFT);
+        }
+        else
+        {
+            velocity.set(0, 0);
+        }
+    }
 
 	private function checkNPCInteraction():Void
-	{
-		for (npc in npcs)
 		{
-			var dx:Float = this.x - npc.x;
-			var dy:Float = this.y - npc.y;
-			var distance:Float = Math.sqrt(dx * dx + dy * dy);
-
-			if (distance < interactionRange)
+			for (npc in npcs)
 			{
-				npc.showInteractIndicator();
-
-				// Use SPACE to toggle between starting and ending dialogue
-				if (FlxG.keys.justPressed.SPACE && !dialogueCooldown)
+				var dx:Float = this.x - npc.x;
+				var dy:Float = this.y - npc.y;
+				var distance:Float = Math.sqrt(dx * dx + dy * dy);
+		
+				if (distance < interactionRange)
 				{
-					if (npc.isDialogueActive)
+					npc.showInteractIndicator();
+		
+					// Use SPACE to toggle between starting and ending dialogue
+					if (FlxG.keys.justPressed.SPACE && !dialogueCooldown && lastDialogueToggleTime > dialogueCooldownTime)
 					{
-						// Check if we're at the last line before ending dialogue
-						if (npc.currentLineIndex < npc.dialogue.length)
+						if (npc.isDialogueActive)
 						{
-							// If not at the last line, just go to the next line
-							npc.nextLine();
+                            dialogueCooldown = true;
+                            lastDialogueToggleTime = 0; // Reset the timer
+							// Check if we're at the last line before ending dialogue
+							if (npc.currentLineIndex < npc.dialogue.length)
+							{
+								// If not at the last line, just go to the next line
+								npc.nextLine();
+                                dialogueCooldown = true;
+								lastDialogueToggleTime = 0; // Reset the timer
+							}
+							else
+							{
+								// If at the last line, end dialogue
+								npc.endDialogue(this);
+		
+								// Activate the cooldown here, only after ending dialogue
+								dialogueCooldown = true;
+								lastDialogueToggleTime = 0; // Reset the timer
+							}
 						}
 						else
 						{
-							// If at the last line, end dialogue
-							npc.endDialogue(this);
+							npc.startDialogue(this);
+                            dialogueCooldown = true;
+                            lastDialogueToggleTime = 0; // Reset the timer
 						}
 					}
-					else
-					{
-						npc.startDialogue(this);
-					}
-
-					// Activate the cooldown to prevent immediate toggling
-					dialogueCooldown = true;
+				}
+				else
+				{
+					npc.hideInteractIndicator();
 				}
 			}
-			else
+		
+			// Reset cooldown when SPACE is released
+			if (FlxG.keys.justReleased.SPACE)
 			{
-				npc.hideInteractIndicator();
+				dialogueCooldown = false;
 			}
 		}
-		if (FlxG.keys.justReleased.SPACE)
-		{
-			dialogueCooldown = false;
-		}
-	}
-
+		
 }

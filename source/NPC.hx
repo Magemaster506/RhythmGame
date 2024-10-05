@@ -98,6 +98,7 @@ class NPC extends FlxSprite {
 				dialogueFrameTimer = 0; // Reset the timer
 			}
 		}
+
 		// Update interaction marker animation
 		interactionFrameTimer += elapsed;
 		if (interactionFrameTimer >= frameChangeSpeed)
@@ -125,10 +126,11 @@ class NPC extends FlxSprite {
 				isTyping = false;
 			}
 		}
+
 		// Check for SPACE key to cycle through dialogue
 		if (isDialogueActive)
 		{
-			if (FlxG.keys.pressed.SPACE)
+			if (FlxG.keys.justPressed.SPACE) // Change from pressed to justPressed
 			{
 				if (!isTyping) // Only cycle if not typing
 				{
@@ -138,17 +140,18 @@ class NPC extends FlxSprite {
 						currentCharIndex = 0; // Reset character index for the new line
 						dialogueText.text = ""; // Reset text to start typing new line
 						isTyping = true; // Start typing effect
+						player.lastDialogueToggleTime = 0;
 					}
 					else if (currentLineIndex == dialogue.length - 1)
 					{
 						// If on the last line and SPACE is pressed, end dialogue
+						player.lastDialogueToggleTime = 0; // Reset the timer
 						endDialogue(player);
 					}
 				}
 			}
 		}
 	}
-
 	public function showInteractIndicator():Void
 	{
 		interactIndicator.visible = true;

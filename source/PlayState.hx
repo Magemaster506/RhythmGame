@@ -52,7 +52,7 @@ class PlayState extends FlxState {
 
         // Initialize NPCs
         npcs = [];
-		var npc1 = new NPC(400, 650, ["Hello!", "Hi"], "assets/images/characters/smallDuck.png");
+		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third line", "The fourth and final string"], "assets/images/characters/smallDuck.png");
 
         npcs.push(npc1);
 
