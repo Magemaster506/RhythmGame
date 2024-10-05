@@ -10,6 +10,7 @@ import openfl.Assets;
 using flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState {
+	// Allocations sorta
     private var player:Player;
     private var background:FlxSprite;
     private var npcs:Array<NPC>;
@@ -17,7 +18,7 @@ class PlayState extends FlxState {
 	private var pauseMenuTop:FlxSprite;
     private var isPaused:Bool = false;
 
-	// Pause menu variables
+	// Pause menu variables and offsets
 	private var targetYBottom:Float;
 	private var targetYTop:Float;
 	private var easingSpeed:Float = 8;
@@ -25,15 +26,13 @@ class PlayState extends FlxState {
 	private var selectedPauseIndex:Int = 0; // Current selection in pause menu
 	private var optionYOffsets:Array<Float> = [230, 330, 430, 530]; // Vertical offsets
 	private var optionXOffsets:Array<Float> = [18, 13, 2, 28]; // Horizontal offsets
-
 	private var animationTimer:Float = 0;
 	private var animationSpeed:Float = 0.2;
-
 	private var pauseOptions:Array<FlxSprite> = [];
 	private var optionFrames:Array<Array<String>> = [];
 
 	// quests
-	private var noQuestsImage:FlxSprite;
+	private var noQuestsImage:FlxSprite; // display when the player has no active quests
 
 
     override public function create():Void {
@@ -50,7 +49,7 @@ class PlayState extends FlxState {
 
         // Initialize NPCs
         npcs = [];
-		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third line", "The fourth and final string"], "assets/images/characters/smallDuck.png");
+		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third string", "The fourth and final string"], "assets/images/characters/smallDuck.png");
 		npcs.push(npc1);
 
 		var npc1 = new NPC(600, 650, ["LINE 1", "LINE 2", "LINE 3", "LINE 4"], "assets/images/characters/bfHead.png");
