@@ -73,7 +73,17 @@ class Player extends FlxSprite {
 				{
 					if (npc.isDialogueActive)
 					{
-						npc.endDialogue(this);
+						// Check if we're at the last line before ending dialogue
+						if (npc.currentLineIndex < npc.dialogue.length)
+						{
+							// If not at the last line, just go to the next line
+							npc.nextLine();
+						}
+						else
+						{
+							// If at the last line, end dialogue
+							npc.endDialogue(this);
+						}
 					}
 					else
 					{
@@ -94,4 +104,5 @@ class Player extends FlxSprite {
 			dialogueCooldown = false;
 		}
 	}
+
 }
