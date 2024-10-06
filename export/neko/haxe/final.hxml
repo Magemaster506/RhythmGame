@@ -32,6 +32,8 @@
 -D desktop
 --remap flash:openfl
 --macro flixel.system.macros.FlxDefines.run()
+--connect
+6000
 -cp export/neko/haxe
 -neko export/neko/obj/ApplicationMain.n
 --macro keep("Main")

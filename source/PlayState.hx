@@ -1,6 +1,7 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.input.gamepad.FlxGamepad.FlxGamepadAttachment;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -32,6 +33,7 @@ class PlayState extends FlxState {
 	private var optionFrames:Array<Array<String>> = [];
 
 	// quests
+	private var activeQuests:Array<Quest> = [];
 	private var noQuestsImage:FlxSprite; // display when the player has no active quests
 
 
@@ -147,6 +149,11 @@ class PlayState extends FlxState {
 		{ // Only toggle if not paused
 			togglePause();
 		}
+		// Temp Add Quest
+		if (FlxG.keys.justPressed.Q)
+		{
+			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/tempQuestBox.png");
+		}
 	
 		if (isPaused)
 		{
@@ -218,6 +225,10 @@ class PlayState extends FlxState {
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
 			noQuestsImage.visible = true; // Show the quest list
+			for (quest in activeQuests)
+			{
+				quest.questImage.visible = true;
+			}
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -239,6 +250,10 @@ class PlayState extends FlxState {
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
 			noQuestsImage.visible = false;
+			for (quest in activeQuests)
+			{
+				quest.questImage.visible = false;
+			}
 			// Make sure all pause options are initialized and not null
 			for (option in pauseOptions)
 			{
@@ -328,12 +343,31 @@ class PlayState extends FlxState {
 				System.exit(0);
 		}
 	}
-	private function updateQuestList(quests:Array<String>):Void
+	private function addQuest(title:String, description:String, imagePath:String):Void
 	{
-		var questText:String = "";
-		for (quest in quests)
+		var quest = new Quest(title, description, imagePath);
+		activeQuests.push(quest);
+		updateQuestList();
+		add(quest.questImage);
+	}
+
+	private function updateQuestList():Void
+	{
+		if (activeQuests.length == 0)
 		{
-			questText += "- " + quest + "\n";
+			noQuestsImage.visible = true;
+		}
+		else
+		{
+			noQuestsImage.visible = false;
+		}
+
+		for (i in 0...activeQuests.length)
+		{
+			var quest = activeQuests[i];
+			quest.questImage.visible = true;
+			quest.questImage.x = FlxG.width - 500;
+			quest.questImage.y = 100 + i * 150;
 		}
 	}
 }
