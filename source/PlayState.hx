@@ -36,6 +36,9 @@ class PlayState extends FlxState {
 	private var activeQuests:Array<Quest> = [];
 	private var noQuestsImage:FlxSprite; // display when the player has no active quests
 
+	// Location Splash
+	private var locationText:FlxSprite;
+
 
     override public function create():Void {
         super.create();
@@ -88,6 +91,14 @@ class PlayState extends FlxState {
 		noQuestsImage.scrollFactor.set();
 		noQuestsImage.visible = false; // Initially hidden
 		add(noQuestsImage);
+
+		// Initialize location text
+		locationText = new FlxSprite(FlxG.width / 2 - 150, -FlxG.height);
+		locationText.loadGraphic("assets/images/other/earthTitleNoHeart.png");
+		locationText.scrollFactor.set();
+		add(locationText);
+
+		FlxTween.tween(locationText, {y: 35}, 1.4, {ease: FlxEase.expoOut, onComplete: hideLocationText});
 
 		optionFrames = [
 			[
@@ -152,7 +163,7 @@ class PlayState extends FlxState {
 		// Temp Add Quest
 		if (FlxG.keys.justPressed.Q)
 		{
-			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/tempQuestBox.png");
+			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/lessTempQuestBox.png");
 		}
 	
 		if (isPaused)
@@ -372,4 +383,9 @@ class PlayState extends FlxState {
 			quest.questImage.y = 100 + i * 150;
 		}
 	}
+	private function hideLocationText(tween:FlxTween):Void
+	{
+		FlxTween.tween(locationText, {alpha: 0}, 1, {startDelay: 4});
+	}
+	
 }
