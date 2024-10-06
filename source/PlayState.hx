@@ -353,7 +353,7 @@ class PlayState extends FlxState {
 
 	private function updateQuestList():Void
 	{
-		if (activeQuests.length == 0)
+		if (activeQuests.length == 0 && isPaused == true)
 		{
 			noQuestsImage.visible = true;
 		}
@@ -362,6 +362,8 @@ class PlayState extends FlxState {
 			noQuestsImage.visible = false;
 		}
 
+		if (isPaused == true) {}
+		
 		for (i in 0...activeQuests.length)
 		{
 			var quest = activeQuests[i];

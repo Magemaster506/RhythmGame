@@ -8,7 +8,7 @@ programming:
             ☐ Assign quest during or after dialogue
     pauseMenu:
         quests:
-            ☐ Array for holding and displaying current quests
+            ✔ Array for holding and displaying current quests @done (10/6/2024, 11:25:37 AM)
             ☐ Do something with completed quests
 
 art:
@@ -16,4 +16,4 @@ art:
         ☐ Assigned quest popup
     pauseMenu:
         quests:
-            ☐ Box for displaying quests assigned and completed quests in the pause menu
+            ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/6/2024, 11:25:46 AM)
