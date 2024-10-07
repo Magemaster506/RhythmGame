@@ -17,7 +17,7 @@ class PlayState extends FlxState {
     private var npcs:Array<NPC>;
 	private var pauseMenuBottom:FlxSprite;
 	private var pauseMenuTop:FlxSprite;
-    private var isPaused:Bool = false;
+	public var isPaused:Bool = false;
 
 	// Pause menu variables and offsets
 	private var targetYBottom:Float;
@@ -65,7 +65,7 @@ class PlayState extends FlxState {
         }
 
         // Player
-        player = new Player(npcs, 100, 600);
+		player = new Player(npcs, 100, 600, this);
 		add(player);
 		// Left Pause Menu
 		pauseMenuBottom = new FlxSprite(0, FlxG.height);
@@ -154,10 +154,17 @@ class PlayState extends FlxState {
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
-
-		// Toggle Pause Menu
-		if (FlxG.keys.justPressed.TAB && !isPaused)
-		{ // Only toggle if not paused
+		var dialogueActive:Bool = false;
+		for (npc in npcs)
+		{
+			if (npc.isDialogueActive)
+			{
+				dialogueActive = true;
+				break;
+			}
+		}
+		if (FlxG.keys.justPressed.TAB && !dialogueActive && !isPaused)
+		{
 			togglePause();
 		}
 		// Temp Add Quest
@@ -230,17 +237,28 @@ class PlayState extends FlxState {
 	private function togglePause():Void
 	{
 		isPaused = !isPaused; 
+
 		if (isPaused)
 		{
 			// Show menus and options, start animating
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
-			noQuestsImage.visible = true; // Show the quest list
+			// Check if there are active quests
+			if (activeQuests.length == 0)
+			{
+				noQuestsImage.visible = true; // Show 'No quests' image if no active quests
+			}
+			else
+			{
+				noQuestsImage.visible = false; // Hide 'No quests' image if there are active quests
+			}
+
+			// Make active quests visible
 			for (quest in activeQuests)
 			{
 				quest.questImage.visible = true;
 			}
-			// Make sure all pause options are initialized and not null
+			// Make sure all pause options are initialized and visible
 			for (option in pauseOptions)
 			{
 				if (option != null)
@@ -260,12 +278,13 @@ class PlayState extends FlxState {
 			// Move pause menus back off-screen
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
+			// Hide 'No quests' image and active quests when unpaused
 			noQuestsImage.visible = false;
 			for (quest in activeQuests)
 			{
 				quest.questImage.visible = false;
 			}
-			// Make sure all pause options are initialized and not null
+			// Make sure all pause options are hidden
 			for (option in pauseOptions)
 			{
 				if (option != null)
@@ -276,6 +295,7 @@ class PlayState extends FlxState {
 		}
 		isAnimating = true;
 	}
+
 	private function toggleSelectedOptionFrame():Void
 	{
 		var currentFrame = pauseOptions[selectedPauseIndex].graphic.key;

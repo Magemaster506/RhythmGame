@@ -5,15 +5,17 @@ class Player extends FlxSprite {
     public var speed:Float = 125;
     var interactionRange:Float = 100;
     public var npcs:Array<NPC>; 
+	private var playState:PlayState;
     public var canMove:Bool = true;
     private var dialogueCooldown:Bool = false;
     private var dialogueCooldownTime:Float = 1.5; // 0.5 seconds cooldown
     public var lastDialogueToggleTime:Float = 0; // Timer for last toggle
 
-    public function new(npcs:Array<NPC>, x:Float, y:Float)
+	public function new(npcs:Array<NPC>, x:Float, y:Float, playState:PlayState)
     {
         super(x, y);
         this.npcs = npcs;
+		this.playState = playState;
         loadGraphic("assets/images/characters/bfHead.png", true, 128, 128); 
     }
 
@@ -60,36 +62,39 @@ class Player extends FlxSprite {
 
 	private function checkNPCInteraction():Void
 		{
+		if (!playState.isPaused)
+		{
+
 			for (npc in npcs)
 			{
 				var dx:Float = this.x - npc.x;
 				var dy:Float = this.y - npc.y;
 				var distance:Float = Math.sqrt(dx * dx + dy * dy);
-		
+
 				if (distance < interactionRange)
 				{
 					npc.showInteractIndicator();
-		
+
 					// Use SPACE to toggle between starting and ending dialogue
 					if (FlxG.keys.justPressed.SPACE && !dialogueCooldown && lastDialogueToggleTime > dialogueCooldownTime)
 					{
 						if (npc.isDialogueActive)
 						{
-                            dialogueCooldown = true;
-                            lastDialogueToggleTime = 0; // Reset the timer
+							dialogueCooldown = true;
+							lastDialogueToggleTime = 0; // Reset the timer
 							// Check if we're at the last line before ending dialogue
 							if (npc.currentLineIndex < npc.dialogue.length)
 							{
 								// If not at the last line, just go to the next line
 								npc.nextLine();
-                                dialogueCooldown = true;
+								dialogueCooldown = true;
 								lastDialogueToggleTime = 0; // Reset the timer
 							}
 							else
 							{
 								// If at the last line, end dialogue
 								npc.endDialogue(this);
-		
+
 								// Activate the cooldown here, only after ending dialogue
 								dialogueCooldown = true;
 								lastDialogueToggleTime = 0; // Reset the timer
@@ -98,8 +103,8 @@ class Player extends FlxSprite {
 						else
 						{
 							npc.startDialogue(this);
-                            dialogueCooldown = true;
-                            lastDialogueToggleTime = 0; // Reset the timer
+							dialogueCooldown = true;
+							lastDialogueToggleTime = 0; // Reset the timer
 						}
 					}
 				}
@@ -108,12 +113,13 @@ class Player extends FlxSprite {
 					npc.hideInteractIndicator();
 				}
 			}
-		
+
 			// Reset cooldown when SPACE is released
 			if (FlxG.keys.justReleased.SPACE)
 			{
 				dialogueCooldown = false;
 			}
 		}
+	}
 		
 }
