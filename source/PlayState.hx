@@ -1,7 +1,6 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.input.gamepad.FlxGamepad.FlxGamepadAttachment;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -35,6 +34,10 @@ class PlayState extends FlxState {
 	// quests
 	private var activeQuests:Array<Quest> = [];
 	private var noQuestsImage:FlxSprite; // display when the player has no active quests
+
+	private var questNotification:QuestNotification;
+	private var questNotificationIdle:QuestNotification;
+
 
 	// Location Splash
 	private var locationText:FlxSprite;
@@ -94,11 +97,40 @@ class PlayState extends FlxState {
 
 		// Initialize location text
 		locationText = new FlxSprite(FlxG.width / 2 - 150, -FlxG.height);
-		locationText.loadGraphic("assets/images/other/earthTitleNoHeart.png");
+		locationText.loadGraphic("assets/images/other/earthTitle.png");
 		locationText.scrollFactor.set();
 		add(locationText);
-
 		FlxTween.tween(locationText, {y: 35}, 1.4, {ease: FlxEase.expoOut, onComplete: hideLocationText});
+
+		// Initialize the quest notification
+		questNotification = new QuestNotification(7, 618, [
+			"assets/images/questNotification/questNotifOpen0001.png",
+			"assets/images/questNotification/questNotifOpen0002.png",
+			"assets/images/questNotification/questNotifOpen0003.png",
+			"assets/images/questNotification/questNotifOpen0004.png",
+			"assets/images/questNotification/questNotifOpen0005.png",
+			"assets/images/questNotification/questNotifOpen0006.png",
+			"assets/images/questNotification/questNotifOpen0007.png",
+			"assets/images/questNotification/questNotifOpen0008.png",
+			"assets/images/questNotification/questNotifOpen0009.png",
+			"assets/images/questNotification/questNotifOpen0010.png",
+			"assets/images/questNotification/questNotifOpen0011.png",
+			"assets/images/questNotification/questNotifOpen0012.png",
+			"assets/images/questNotification/questNotifOpen0013.png",
+			"assets/images/questNotification/questNotifOpen0014.png",
+			"assets/images/questNotification/questNotifOpen0015.png",
+			"assets/images/questNotification/questNotifOpen0016.png"
+		], [
+			"assets/images/questNotification/questNotifIdle0001.png",
+			"assets/images/questNotification/questNotifIdle0002.png",
+			"assets/images/questNotification/questNotifIdle0003.png",
+			"assets/images/questNotification/questNotifIdle0004.png",
+			"assets/images/questNotification/questNotifIdle0005.png",
+			"assets/images/questNotification/questNotifIdle0006.png",
+			"assets/images/questNotification/questNotifIdle0007.png"
+		]);
+
+		add(questNotification);
 
 		optionFrames = [
 			[
@@ -170,7 +202,7 @@ class PlayState extends FlxState {
 		// Temp Add Quest
 		if (FlxG.keys.justPressed.Q)
 		{
-			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/lessTempQuestBox.png");
+			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/tempQuestBox.png");
 		}
 	
 		if (isPaused)
@@ -207,25 +239,44 @@ class PlayState extends FlxState {
 			{
 				pauseOptions[i].y = pauseMenuBottom.y + optionYOffsets[i];
 			}
-			
+
 			// Update the position of noQuestsImage relative to pauseMenuTop
-			noQuestsImage.y = pauseMenuTop.y + 100; // Adjust 100 to match the intended offset
-			
+			noQuestsImage.y = pauseMenuTop.y + 100;
+
+			// Animate quest boxes relative to pauseMenuTop
+			for (i in 0...activeQuests.length)
+			{
+				var quest = activeQuests[i];
+				quest.questImage.y = pauseMenuTop.y + 100 + i * 150; // Adjust to the desired offset
+			}
+
 			if (Math.abs(pauseMenuBottom.y - targetYBottom) < 1 && Math.abs(pauseMenuTop.y - targetYTop) < 1)
 			{
 				// Snap to target positions
 				pauseMenuBottom.y = targetYBottom;
 				pauseMenuTop.y = targetYTop;
-				noQuestsImage.y = pauseMenuTop.y + 100; // Final adjustment when snapping
+				noQuestsImage.y = pauseMenuTop.y + 100;
+
+				// Snap quest boxes to their final positions
+				for (i in 0...activeQuests.length)
+				{
+					var quest = activeQuests[i];
+					quest.questImage.y = pauseMenuTop.y + 100 + i * 150; // Final adjustment when snapping
+				}
+
 				if (!isPaused)
 				{
 					pauseMenuBottom.visible = false;
 					pauseMenuTop.visible = false;
 					noQuestsImage.visible = false;
-					// Hide options when unpaused
+					// Hide options and quest boxes when unpaused
 					for (option in pauseOptions)
 					{
 						option.visible = false;
+					}
+					for (quest in activeQuests)
+					{
+						quest.questImage.visible = false;
 					}
 					isAnimating = false;
 				}
@@ -241,6 +292,7 @@ class PlayState extends FlxState {
 		if (isPaused)
 		{
 			// Show menus and options, start animating
+			updateQuestList();
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
 			// Check if there are active quests
@@ -378,8 +430,8 @@ class PlayState extends FlxState {
 	{
 		var quest = new Quest(title, description, imagePath);
 		activeQuests.push(quest);
-		updateQuestList();
 		add(quest.questImage);
+		questNotification.playAnimation();
 	}
 
 	private function updateQuestList():Void

@@ -2,10 +2,11 @@
 programming:
     dialogue:
         ☐ Update NPC dialogue during runtime when event is called
-        ☐ Opening and closing the pause menu during dialogue allows the player to start moving
+        ✔ Opening and closing the pause menu during dialogue allows the player to start moving @done (10/7/2024, 7:00:52 PM)
         ☐ Reverse the dialogue box animation when closing dialogue
         quests:
             ☐ Assign quest during or after dialogue
+            ✔ Quest popup wont animate 😭 @done (10/11/2024, 11:11:57 AM)
     pauseMenu:
         quests:
             ✔ Array for holding and displaying current quests @done (10/6/2024, 11:25:37 AM)
@@ -16,4 +17,6 @@ art:
         ☐ Assigned quest popup
     pauseMenu:
         quests:
-            ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/6/2024, 11:25:46 AM)
+            ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/11/2024, 10:52:56 AM)
+            ☐ Allign that shit
+            ☐ Probably redraw again
