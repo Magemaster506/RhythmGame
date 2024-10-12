@@ -38,13 +38,11 @@ class PlayState extends FlxState {
 	private var questNotification:QuestNotification;
 	private var questNotificationIdle:QuestNotification;
 
-	// quest data
+	// Quest Items
 	public var questTestData:Quest;
-
 
 	// Location Splash
 	private var locationText:FlxSprite;
-
 
     override public function create():Void {
         super.create();
@@ -59,7 +57,7 @@ class PlayState extends FlxState {
         FlxG.mouse.load(cursorBitmapData);
 
 		// Initialize Quest Data
-		questTestData = new Quest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBox.png");
+		questTestData = new Quest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
 
         // Initialize NPCs
         npcs = [];
@@ -126,7 +124,11 @@ class PlayState extends FlxState {
 			"assets/images/questNotification/questNotifOpen0013.png",
 			"assets/images/questNotification/questNotifOpen0014.png",
 			"assets/images/questNotification/questNotifOpen0015.png",
-			"assets/images/questNotification/questNotifOpen0016.png"
+			"assets/images/questNotification/questNotifOpen0016.png",
+			"assets/images/questNotification/questNotifOpen0017.png",
+			"assets/images/questNotification/questNotifOpen0018.png",
+			"assets/images/questNotification/questNotifOpen0019.png",
+			"assets/images/questNotification/questNotifOpen0020.png",
 		], [
 			"assets/images/questNotification/questNotifIdle0001.png",
 			"assets/images/questNotification/questNotifIdle0002.png",
@@ -134,7 +136,16 @@ class PlayState extends FlxState {
 			"assets/images/questNotification/questNotifIdle0004.png",
 			"assets/images/questNotification/questNotifIdle0005.png",
 			"assets/images/questNotification/questNotifIdle0006.png",
-			"assets/images/questNotification/questNotifIdle0007.png"
+			"assets/images/questNotification/questNotifIdle0007.png",
+			"assets/images/questNotification/questNotifIdle0008.png",
+			"assets/images/questNotification/questNotifIdle0009.png",
+			"assets/images/questNotification/questNotifIdle0010.png",
+			"assets/images/questNotification/questNotifIdle0011.png",
+			"assets/images/questNotification/questNotifIdle0012.png",
+			"assets/images/questNotification/questNotifIdle0013.png",
+			"assets/images/questNotification/questNotifIdle0014.png",
+			"assets/images/questNotification/questNotifIdle0015.png",
+			"assets/images/questNotification/questNotifIdle0016.png"
 		]);
 
 		add(questNotification);
@@ -209,7 +220,7 @@ class PlayState extends FlxState {
 		// Temp Add Quest
 		if (FlxG.keys.justPressed.Q)
 		{
-			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/tempQuestBox.png");
+			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
 		}
 	
 		if (isPaused)
@@ -289,7 +300,6 @@ class PlayState extends FlxState {
 				}
 			}
 		}
-
 	}
 
 	private function togglePause():Void
@@ -458,8 +468,8 @@ class PlayState extends FlxState {
 		{
 			var quest = activeQuests[i];
 			quest.questImage.visible = true;
-			quest.questImage.x = FlxG.width - 500;
-			quest.questImage.y = 100 + i * 150;
+			quest.questImage.x = FlxG.width - 540;
+			quest.questImage.y = 200 + i * 150;
 		}
 	}
 	private function hideLocationText(tween:FlxTween):Void

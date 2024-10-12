@@ -12,7 +12,7 @@ class QuestNotification extends FlxSprite
     private var idleAnimationSpeed:Float = 0.055; // Speed of the idle animation (in seconds per frame)
     private var timer:Float = 0; // Timer to keep track of frame switching
     private var isIdle:Bool = false; // Flag to check if idle animation is playing
-    private var idleDuration:Float = 3; // Duration for how long the idle animation should loop
+	private var idleDuration:Float = 5; // Duration for how long the idle animation should loop
     private var idleTimer:Float = 0; // Timer for idle animation duration
 
     public function new(x:Float, y:Float, frames:Array<String>, idleFrames:Array<String>)
