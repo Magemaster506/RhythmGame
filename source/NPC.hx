@@ -9,6 +9,7 @@ class NPC extends FlxSprite {
 	var dialogueText:FlxText;
 	var interactIndicator:FlxSprite;
 	public var currentLineIndex:Int = 0; // Track the current dialogue line
+	var playState:PlayState;
 
 	var currentCharIndex:Int = 0; // Track character index for typing effect
 	var typewriterSpeed:Float = 0.05; // Time interval between each character
@@ -30,11 +31,18 @@ class NPC extends FlxSprite {
 	private var interactionFrameTimer:Float = 0;
 	private var frameChangeSpeed:Float = 0.04; // Time between frames
 
-	public function new(x:Float, y:Float, dialogue:Array<String>, imagePath:String)
+	public var hasQuest:Bool;
+	public var questData:Quest;
+
+	public function new(x:Float, y:Float, dialogue:Array<String>, imagePath:String, hasQuest:Bool = false, questData:Quest = null, playState:PlayState)
 	{
 		super(x, y);
-		this.dialogue = dialogue; // Assign dialogue array
+		this.dialogue = dialogue;
 		this.imagePath = imagePath;
+		this.hasQuest = hasQuest;
+		this.questData = questData;
+		this.playState = playState;
+
 		loadGraphic(imagePath);
 
 		// Initialize dialogue frames
@@ -49,13 +57,13 @@ class NPC extends FlxSprite {
 
 		// Initialize dialogue box
 		dialogueBox = new FlxSprite(100, 50);
-		dialogueBox.loadGraphic(dialogueFrames[0], true, 760, 171); // Load the first frame
+		dialogueBox.loadGraphic(dialogueFrames[0], true, 750, 171); // Load the first frame
 		dialogueBox.visible = false; // Start hidden
 		FlxG.state.add(dialogueBox);
 
 		// Initialize the text field for dialogue
 		dialogueText = new FlxText(175, 70, 600, "");
-		dialogueText.setFormat(null, 20, 0x181818, "left");
+		dialogueText.setFormat(null, 20, 0xFFE8FF, "left");
 		dialogueText.visible = false; // Start hidden
 		FlxG.state.add(dialogueText);
 
@@ -91,7 +99,7 @@ class NPC extends FlxSprite {
 			if (dialogueFrameIndex < dialogueFrames.length - 1 && dialogueFrameTimer >= frameChangeSpeed)
 			{
 				dialogueFrameIndex++;
-				dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 760, 171);
+				dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 750, 171);
 				dialogueFrameTimer = 0; // Reset the timer
 			}
 		}
@@ -168,7 +176,7 @@ class NPC extends FlxSprite {
 			player.canMove = false; // Disable player movement during dialogue
 			dialogueBox.visible = true; // Show the dialogue box
 			dialogueFrameIndex = 0; // Reset frame index for dialogue box
-			dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 760, 171); // Load the first frame
+			dialogueBox.loadGraphic(dialogueFrames[dialogueFrameIndex], true, 750, 171); // Load the first frame
 			dialogueText.visible = true; // Show dialogue text
 			dialogueText.text = ""; // Reset the dialogue text
 			currentLineIndex = 0; // Reset current line index
@@ -187,6 +195,7 @@ class NPC extends FlxSprite {
 		dialogueText.visible = false; // Hide dialogue text
 		isTyping = false; // Set typing to false
 		isDialogueActive = false; // Set dialogue as inactive
+		giveQuest();
 	}
 	public function nextLine():Void
 	{
@@ -199,5 +208,12 @@ class NPC extends FlxSprite {
 		}
 	}
 		
+	public function giveQuest():Void
+	{
+		if (hasQuest && questData != null)
+		{
+			playState.addQuest(questData.title, questData.description, questData.imagePath);
+		}
+	}
 		
 }

@@ -32,7 +32,7 @@ class QuestNotification extends FlxSprite
         {
             timer += elapsed;
             
-            if (isIdle)
+			if (isIdle)
             {
                 // Update idle animation with idle animation speed
                 if (timer >= idleAnimationSpeed)

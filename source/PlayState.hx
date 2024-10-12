@@ -38,6 +38,9 @@ class PlayState extends FlxState {
 	private var questNotification:QuestNotification;
 	private var questNotificationIdle:QuestNotification;
 
+	// quest data
+	public var questTestData:Quest;
+
 
 	// Location Splash
 	private var locationText:FlxSprite;
@@ -55,13 +58,17 @@ class PlayState extends FlxState {
 		var cursorBitmapData = Assets.getBitmapData("assets/images/shared/cursorDot.png");
         FlxG.mouse.load(cursorBitmapData);
 
+		// Initialize Quest Data
+		questTestData = new Quest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBox.png");
+
         // Initialize NPCs
         npcs = [];
-		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third string", "The fourth and final string"], "assets/images/characters/smallDuck.png");
+		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third string", "The fourth and final string"], "assets/images/characters/smallDuck.png",
+			true, questTestData, this);
 		npcs.push(npc1);
 
-		var npc1 = new NPC(600, 650, ["LINE 1", "LINE 2", "LINE 3", "LINE 4"], "assets/images/characters/bfHead.png");
-        npcs.push(npc1);
+		var npc2 = new NPC(600, 650, ["LINE 1", "LINE 2", "LINE 3", "LINE 4"], "assets/images/characters/bfHead.png", false, null, this);
+		npcs.push(npc2);
 
         for (npc in npcs) {
             add(npc);
@@ -426,7 +433,7 @@ class PlayState extends FlxState {
 				System.exit(0);
 		}
 	}
-	private function addQuest(title:String, description:String, imagePath:String):Void
+	public function addQuest(title:String, description:String, imagePath:String):Void
 	{
 		var quest = new Quest(title, description, imagePath);
 		activeQuests.push(quest);

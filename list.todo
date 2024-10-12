@@ -7,6 +7,7 @@ programming:
         quests:
             ☐ Assign quest during or after dialogue
             ✔ Quest popup wont animate 😭 @done (10/11/2024, 11:11:57 AM)
+            ✔ Quest popup animate with open and idle, idle should loop @done (10/11/2024, 2:00:41 PM)
     pauseMenu:
         quests:
             ✔ Array for holding and displaying current quests @done (10/6/2024, 11:25:37 AM)
@@ -14,9 +15,10 @@ programming:
 
 art:
     quests:
-        ☐ Assigned quest popup
+        ✔ Assigned quest popup @done (10/11/2024, 12:12:56 PM)
     pauseMenu:
         quests:
             ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/11/2024, 10:52:56 AM)
-            ☐ Allign that shit
-            ☐ Probably redraw again
+            ☐ Probably redraw again 😬
+            ☐ Allign this^ (after redraw)😭
+            ☐ Maybe take out some frames from the notification box opening animation - at the start? probably best
