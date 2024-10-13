@@ -57,7 +57,7 @@ class PlayState extends FlxState {
         FlxG.mouse.load(cursorBitmapData);
 
 		// Initialize Quest Data
-		questTestData = new Quest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
+		questTestData = new Quest("Test Quest Title", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
 
         // Initialize NPCs
         npcs = [];
@@ -72,7 +72,7 @@ class PlayState extends FlxState {
             add(npc);
         }
 
-        // Player
+		// Player
 		player = new Player(npcs, 100, 600, this);
 		add(player);
 		// Left Pause Menu
@@ -220,7 +220,8 @@ class PlayState extends FlxState {
 		// Temp Add Quest
 		if (FlxG.keys.justPressed.Q)
 		{
-			addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
+			// addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
+			completeQuest("Test Quest Title");
 		}
 	
 		if (isPaused)
@@ -443,12 +444,29 @@ class PlayState extends FlxState {
 				System.exit(0);
 		}
 	}
+
 	public function addQuest(title:String, description:String, imagePath:String):Void
 	{
 		var quest = new Quest(title, description, imagePath);
 		activeQuests.push(quest);
 		add(quest.questImage);
 		questNotification.playAnimation();
+	}
+
+	public function completeQuest(questTitle:String):Void
+	{
+		for (i in 0...activeQuests.length)
+		{
+			if (activeQuests[i].title == questTitle)
+			{
+				activeQuests.splice(i, 1);
+
+				updateQuestList();
+
+				break;
+			}
+			// trace a message
+		}
 	}
 
 	private function updateQuestList():Void
