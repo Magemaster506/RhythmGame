@@ -20,7 +20,7 @@ art:
     pauseMenu:
         quests:
             ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/11/2024, 10:52:56 AM)
-            ✔ Probably redraw again 😬 @done (10/12/2024, 4:17:37 PM)
-            ☐ Allign this^ (after redraw)😭
+            ✔ Probably redraw again  @done (10/12/2024, 4:17:37 PM)
+            ☐ Allign this^ (after redraw)
             ✘ Maybe take out some frames from the notification box opening animation - at the start? probably best @cancelled (10/12/2024, 11:02:17 PM)
             ☐ "QUEST LOG" Header in pause menu.
