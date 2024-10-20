@@ -9,12 +9,14 @@ programming:
             ✔ Quest popup wont animate 😭 @done (10/11/2024, 11:11:57 AM)
             ✔ Quest popup animate with open and idle, idle should loop @done (10/11/2024, 2:00:41 PM)
             ✔ Quest completed function @done (10/13/2024, 10:25:48 AM)
+            ✔ Hide quest notification when pausing game @done (10/19/2024, 9:18:08 AM)
     pauseMenu:
         quests:
             ✔ Array for holding and displaying current quests @done (10/6/2024, 11:25:37 AM)
-            ☐ Do something with completed quests
 
 art:
+    ☐ Draw proper splash screen
+    ☐ Main menu background
     quests:
         ✔ Assigned quest popup @done (10/11/2024, 12:12:56 PM)
     pauseMenu:
@@ -22,5 +24,4 @@ art:
             ✔ Box for displaying quests assigned and completed quests in the pause menu @done (10/11/2024, 10:52:56 AM)
             ✔ Probably redraw again  @done (10/12/2024, 4:17:37 PM)
             ☐ Allign this^ (after redraw)
-            ✘ Maybe take out some frames from the notification box opening animation - at the start? probably best @cancelled (10/12/2024, 11:02:17 PM)
             ☐ "QUEST LOG" Header in pause menu.

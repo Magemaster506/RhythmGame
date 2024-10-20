@@ -14,6 +14,7 @@ class MainMenuState extends FlxState
     private var selectedIndex:Int = 0;
     private var animationTimer:Float = 0;
     private var animationSpeed:Float = 0.2; // Time between frame changes
+	private var blackOverlay:FlxSprite;
 
     private var optionFrames:Array<Array<String>> = [
         [
@@ -23,8 +24,8 @@ class MainMenuState extends FlxState
         ],
         [
             "assets/images/menus/text/optionsUnselected.png",
-            "assets/images/menus/text/optionsSelected1.png",
-            "assets/images/menus/text/optionsSelected2.png"
+			"assets/images/menus/text/options/optionsSelected1.png",
+			"assets/images/menus/text/options/optionsSelected2.png"
         ],
         [
             "assets/images/menus/text/quitUnselected.png",
@@ -34,30 +35,42 @@ class MainMenuState extends FlxState
     ];
 
     override public function create():Void
-    {
-
+	{
 		background = new FlxSprite(0, 0);
 		background.loadGraphic("assets/images/menus/mainmenu/mainMenuBackground.png");
 		add(background);
 
+		// Create black overlay for transition effect
+        
         // Add options to the menu
         options = [];
         var centerY:Float = FlxG.height / 2 - 50;
         var offset:Float = 120;
 
         for (i in 0...optionFrames.length)
-        {
-            var option:FlxSprite = new FlxSprite();
-            option.loadGraphic(optionFrames[i][0]); // Set the unselected frame initially
-            option.screenCenter();
-            option.y = centerY + offset * i;
-            option.alpha = (i == selectedIndex) ? 1 : 0.8;
-            options.push(option);
-            add(option);
-        }
+		{
+			var option:FlxSprite = new FlxSprite();
+			option.loadGraphic(optionFrames[i][0]); // Set the unselected frame initially
+			option.screenCenter();
+			option.y = centerY + offset * i;
+			option.alpha = (i == selectedIndex) ? 1 : 0.8;
+			options.push(option);
+			add(option);
+		}
 
-        // Update the initial menu graphics
-        updateMenuGraphics();
+		// Update the initial menu graphics
+		updateMenuGraphics();
+		// Transition obj
+		blackOverlay = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height + 200, 0xFF000000);
+		add(blackOverlay);
+
+		initialTransition();
+	}
+
+	private function initialTransition():Void
+	{
+		FlxTween.tween(blackOverlay, {y: 775}, 1.8, {ease: FlxEase.expoOut});
+	
     }
 
     override public function update(elapsed:Float):Void
@@ -157,6 +170,17 @@ class MainMenuState extends FlxState
 
     private function selectOption():Void
     {
+		// Play transition animation before switching state
+		FlxTween.tween(blackOverlay, {y: -9}, 1.2, {ease: FlxEase.expoOut, onComplete: waitTransition});
+	}
+
+	private function waitTransition(tween:FlxTween):Void
+	{
+		FlxTween.tween(blackOverlay, {y: -30}, 0.8, {ease: FlxEase.expoOut, onComplete: onTransitionComplete});
+	}
+
+	private function onTransitionComplete(tween:FlxTween):Void
+	{
         switch (selectedIndex)
         {
             case 0:

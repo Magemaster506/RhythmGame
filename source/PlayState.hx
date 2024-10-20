@@ -9,6 +9,7 @@ import openfl.Assets;
 
 using flixel.util.FlxSpriteUtil;
 
+
 class PlayState extends FlxState {
 	// Allocations sorta
     private var player:Player;
@@ -43,6 +44,9 @@ class PlayState extends FlxState {
 
 	// Location Splash
 	private var locationText:FlxSprite;
+
+	// Transition OBJ
+	private var blackOverlay:FlxSprite;
 
     override public function create():Void {
         super.create();
@@ -108,7 +112,7 @@ class PlayState extends FlxState {
 		FlxTween.tween(locationText, {y: 35}, 1.4, {ease: FlxEase.expoOut, onComplete: hideLocationText});
 
 		// Initialize the quest notification
-		questNotification = new QuestNotification(13, 705, [
+		questNotification = new QuestNotification(13, 800, [
 			"assets/images/questNotification/questNotification0001.png",
 			"assets/images/questNotification/questNotification0002.png",
 			"assets/images/questNotification/questNotification0003.png",
@@ -184,6 +188,9 @@ class PlayState extends FlxState {
 		}
 
 		updatePauseMenuGraphics();
+		// Transition obj
+		blackOverlay = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height + 200, 0xFF000000);
+		add(blackOverlay);
     }
 
 	override public function update(elapsed:Float):Void
@@ -312,6 +319,7 @@ class PlayState extends FlxState {
 		{
 			// Show menus and options, start animating
 			updateQuestList();
+			questNotification.visible = false;
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
 			// Check if there are active quests
@@ -429,6 +437,10 @@ class PlayState extends FlxState {
 		}
 	}
 
+	private function goToMenu(tween:FlxTween):Void
+	{
+		FlxG.switchState(new MainMenuState());
+	}
 
 	private function selectPauseOption():Void
 	{
@@ -440,7 +452,7 @@ class PlayState extends FlxState {
 			case 1: // Options
 				// Handle pause menu options
 			case 2: // Main Menu
-				FlxG.switchState(new MainMenuState());
+				FlxTween.tween(blackOverlay, {y: -9}, 1.2, {ease: FlxEase.expoOut, onComplete: goToMenu});
 			case 3: // Quit
 				System.exit(0);
 		}
@@ -493,6 +505,7 @@ class PlayState extends FlxState {
 	}
 	private function hideLocationText(tween:FlxTween):Void
 	{
+		FlxTween.tween(blackOverlay, {y: 775}, 1.8, {ease: FlxEase.expoOut});
 		FlxTween.tween(locationText, {alpha: 0}, 1, {startDelay: 4});
 	}
 	
