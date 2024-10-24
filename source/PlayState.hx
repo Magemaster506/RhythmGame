@@ -106,10 +106,11 @@ class PlayState extends FlxState {
 		noQuestsImage.visible = false; // Initially hidden
 		add(noQuestsImage);
 
-		questHeaderImage = new FlxText(FlxG.width / 2 + 50, 50);
-		questHeaderImage.loadGraphic("assets/images/menus/questHeader.png");
+		// Initialize quest header image
+		questHeaderImage = new FlxText(FlxG.width / 2 + 60, -200);
+		questHeaderImage.loadGraphic("assets/images/missingTexture.png");
 		questHeaderImage.scrollFactor.set();
-		questHeaderImage.visible = true;
+		questHeaderImage.visible = false;
 		add(questHeaderImage);
 
 		// Initialize location text
@@ -330,11 +331,12 @@ class PlayState extends FlxState {
 			questNotification.visible = false;
 			pauseMenuBottom.visible = true;
 			pauseMenuTop.visible = true;
+			questHeaderImage.visible = true;
+			FlxTween.tween(questHeaderImage, {y: 50}, 1.5, {ease: FlxEase.quintInOut});
 			// Check if there are active quests
 			if (activeQuests.length == 0)
 			{
 				noQuestsImage.visible = true; // Show 'No quests' image if no active quests
-				questHeaderImage.visible = true;
 			}
 			else
 			{
@@ -368,6 +370,7 @@ class PlayState extends FlxState {
 			targetYTop = -FlxG.height;
 			// Hide 'No quests' image and active quests when unpaused
 			noQuestsImage.visible = false;
+			questHeaderImage.visible = false;
 			for (quest in activeQuests)
 			{
 				quest.questImage.visible = false;
