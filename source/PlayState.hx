@@ -34,7 +34,7 @@ class PlayState extends FlxState {
 
 	// quests
 	private var activeQuests:Array<Quest> = [];
-	private var noQuestsImage:FlxSprite; // display when the player has no active quests
+	private var noQuestsImage:FlxSprite;
 
 	private var questNotification:QuestNotification;
 	private var questNotificationIdle:QuestNotification;
@@ -67,12 +67,13 @@ class PlayState extends FlxState {
 
         // Initialize NPCs
         npcs = [];
+
 		var npc1 = new NPC(400, 650, ["Hello!", "Hi", "This is the third string", "The fourth and final string"], "assets/images/characters/smallDuck.png",
 			true, questTestData, this);
 		npcs.push(npc1);
 
 		var npc2 = new NPC(600, 650, ["LINE 1", "LINE 2", "LINE 3", "LINE 4"], "assets/images/characters/bfHead.png", false, null, this);
-		npcs.push(npc2);
+		// npcs.push(npc2);
 
         for (npc in npcs) {
             add(npc);
@@ -103,7 +104,7 @@ class PlayState extends FlxState {
 		noQuestsImage = new FlxText(FlxG.width / 2 + 50, 100);
 		noQuestsImage.loadGraphic("assets/images/menus/noQuests.png");
 		noQuestsImage.scrollFactor.set();
-		noQuestsImage.visible = false; // Initially hidden
+		noQuestsImage.visible = false;
 		add(noQuestsImage);
 
 		// Initialize quest header image
@@ -197,6 +198,7 @@ class PlayState extends FlxState {
 		}
 
 		updatePauseMenuGraphics();
+
 		// Transition obj
 		blackOverlay = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height + 200, 0xFF000000);
 		add(blackOverlay);
@@ -233,12 +235,6 @@ class PlayState extends FlxState {
 		if (FlxG.keys.justPressed.TAB && !dialogueActive && !isPaused)
 		{
 			togglePause();
-		}
-		// Temp Add Quest
-		if (FlxG.keys.justPressed.Q)
-		{
-			// addQuest("Find the Hidden Key", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
-			completeQuest("Test Quest Title");
 		}
 	
 		if (isPaused)
@@ -283,7 +279,7 @@ class PlayState extends FlxState {
 			for (i in 0...activeQuests.length)
 			{
 				var quest = activeQuests[i];
-				quest.questImage.y = pauseMenuTop.y + 100 + i * 150; // Adjust to the desired offset
+				quest.questImage.y = pauseMenuTop.y + 100 + i * 150;
 			}
 
 			if (Math.abs(pauseMenuBottom.y - targetYBottom) < 1 && Math.abs(pauseMenuTop.y - targetYTop) < 1)
@@ -297,7 +293,7 @@ class PlayState extends FlxState {
 				for (i in 0...activeQuests.length)
 				{
 					var quest = activeQuests[i];
-					quest.questImage.y = pauseMenuTop.y + 100 + i * 150; // Final adjustment when snapping
+					quest.questImage.y = pauseMenuTop.y + 100 + i * 150;
 				}
 
 				if (!isPaused)
@@ -305,6 +301,7 @@ class PlayState extends FlxState {
 					pauseMenuBottom.visible = false;
 					pauseMenuTop.visible = false;
 					noQuestsImage.visible = false;
+
 					// Hide options and quest boxes when unpaused
 					for (option in pauseOptions)
 					{
@@ -342,11 +339,11 @@ class PlayState extends FlxState {
 			// Check if there are active quests
 			if (activeQuests.length == 0)
 			{
-				noQuestsImage.visible = true; // Show 'No quests' image if no active quests
+				noQuestsImage.visible = true; 
 			}
 			else
 			{
-				noQuestsImage.visible = false; // Hide 'No quests' image if there are active quests
+				noQuestsImage.visible = false;
 			}
 
 			// Make active quests visible
@@ -358,7 +355,7 @@ class PlayState extends FlxState {
 			for (option in pauseOptions)
 			{
 				if (option != null)
-				{ // Check if the option is not null
+				{
 					option.visible = true;
 				}
 			}
@@ -370,11 +367,12 @@ class PlayState extends FlxState {
 		}
 		else
 		{
+			updateQuestList();
 			player.canMove = true;
 			// Move pause menus back off-screen
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
-			// Hide 'No quests' image and active quests when unpaused
+
 			FlxTween.tween(questHeaderImage, {y: -200}, 1, {
 				ease: FlxEase.expoOut,
 				onComplete: hideQuestHeader
@@ -388,7 +386,7 @@ class PlayState extends FlxState {
 			for (option in pauseOptions)
 			{
 				if (option != null)
-				{ // Check if the option is not null
+				{
 					option.visible = false;
 				}
 			}
@@ -403,11 +401,11 @@ class PlayState extends FlxState {
 
 		if (currentFrame == optionFrames[selectedPauseIndex][1])
 		{
-			frameToSwitch = optionFrames[selectedPauseIndex][2]; // Switch to third frame
+			frameToSwitch = optionFrames[selectedPauseIndex][2];
 		}
 		else
 		{
-			frameToSwitch = optionFrames[selectedPauseIndex][1]; // Switch to second frame
+			frameToSwitch = optionFrames[selectedPauseIndex][1]; 
 		}
 
 		pauseOptions[selectedPauseIndex].loadGraphic(frameToSwitch);
@@ -418,22 +416,22 @@ class PlayState extends FlxState {
 	{
 		var centerY:Float = FlxG.height / 2 - 50; // The selected option should move here
 		var offset:Float = 120; // Space between each option
-		var selectedOffsetX:Float = 15; // X offset for the selected option (amount to move to the right)
-		// Reset the animation timer whenever an option is highlighted
-		animationTimer = 0;
+		var selectedOffsetX:Float = 15; // X offset for the selected option
+
+		animationTimer = 0; // Reset the animation timer whenever an option is highlighted
 		
 		for (i in 0...pauseOptions.length)
 		{
 			var targetY:Float;
-			var targetX:Float = optionXOffsets[i]; // Start with the initial X position
+			var targetX:Float = optionXOffsets[i];
 			// Update the graphic for the selected option immediately
 			if (i == selectedPauseIndex)
 			{
-				pauseOptions[i].loadGraphic(optionFrames[i][1]); // Set to the selected frame immediately
+				pauseOptions[i].loadGraphic(optionFrames[i][1]);
 			}
 			else
 			{
-				pauseOptions[i].loadGraphic(optionFrames[i][0]); // Set to default frame when not selected
+				pauseOptions[i].loadGraphic(optionFrames[i][0]);
 			}
 		
 			if (i < selectedPauseIndex)
@@ -443,7 +441,7 @@ class PlayState extends FlxState {
 			else if (i == selectedPauseIndex)
 			{
 				targetY = centerY; // Center the selected option
-				targetX += selectedOffsetX; // Move selected option to the right by adding offset
+				targetX += selectedOffsetX; 
 			}
 			else
 			{
@@ -499,7 +497,6 @@ class PlayState extends FlxState {
 
 				break;
 			}
-			// trace a message
 		}
 	}
 
