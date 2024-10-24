@@ -39,6 +39,8 @@ class PlayState extends FlxState {
 	private var questNotification:QuestNotification;
 	private var questNotificationIdle:QuestNotification;
 
+	private var questHeaderImage:FlxSprite;
+
 	// Quest Items
 	public var questTestData:Quest;
 
@@ -103,6 +105,12 @@ class PlayState extends FlxState {
 		noQuestsImage.scrollFactor.set();
 		noQuestsImage.visible = false; // Initially hidden
 		add(noQuestsImage);
+
+		questHeaderImage = new FlxText(FlxG.width / 2 + 50, 50);
+		questHeaderImage.loadGraphic("assets/images/menus/questHeader.png");
+		questHeaderImage.scrollFactor.set();
+		questHeaderImage.visible = true;
+		add(questHeaderImage);
 
 		// Initialize location text
 		locationText = new FlxSprite(FlxG.width / 2 - 150, -FlxG.height);
@@ -326,6 +334,7 @@ class PlayState extends FlxState {
 			if (activeQuests.length == 0)
 			{
 				noQuestsImage.visible = true; // Show 'No quests' image if no active quests
+				questHeaderImage.visible = true;
 			}
 			else
 			{
