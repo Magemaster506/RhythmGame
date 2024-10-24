@@ -320,6 +320,11 @@ class PlayState extends FlxState {
 		}
 	}
 
+	private function hideQuestHeader(tween:FlxTween):Void
+	{
+		questHeaderImage.visible = false;
+	}
+
 	private function togglePause():Void
 	{
 		isPaused = !isPaused; 
@@ -333,6 +338,7 @@ class PlayState extends FlxState {
 			pauseMenuTop.visible = true;
 			questHeaderImage.visible = true;
 			FlxTween.tween(questHeaderImage, {y: 50}, 1.5, {ease: FlxEase.quintInOut});
+
 			// Check if there are active quests
 			if (activeQuests.length == 0)
 			{
@@ -369,8 +375,11 @@ class PlayState extends FlxState {
 			targetYBottom = FlxG.height;
 			targetYTop = -FlxG.height;
 			// Hide 'No quests' image and active quests when unpaused
-			noQuestsImage.visible = false;
-			questHeaderImage.visible = false;
+			FlxTween.tween(questHeaderImage, {y: -200}, 1, {
+				ease: FlxEase.expoOut,
+				onComplete: hideQuestHeader
+			});
+			noQuestsImage.visible = false;	
 			for (quest in activeQuests)
 			{
 				quest.questImage.visible = false;

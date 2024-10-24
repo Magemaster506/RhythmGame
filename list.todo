@@ -13,6 +13,7 @@ programming:
     pauseMenu:
         quests:
             ✔ Array for holding and displaying current quests @done (10/6/2024, 11:25:37 AM)
+            ☐ Animate out quest Header
 
 art:
     ☐ Draw proper splash screen
