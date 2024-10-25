@@ -40,8 +40,6 @@ class MainMenuState extends FlxState
 		background.loadGraphic("assets/images/menus/mainmenu/mainMenuBackground.png");
 		add(background);
 
-		// Create black overlay for transition effect
-        
         // Add options to the menu
         options = [];
         var centerY:Float = FlxG.height / 2 - 50;
@@ -70,7 +68,6 @@ class MainMenuState extends FlxState
 	private function initialTransition():Void
 	{
 		FlxTween.tween(blackOverlay, {y: 775}, 1.8, {ease: FlxEase.expoOut});
-	
     }
 
     override public function update(elapsed:Float):Void
@@ -188,7 +185,7 @@ class MainMenuState extends FlxState
                 FlxG.switchState(new PlayState());
             case 1:
                 // Handle "Options"
-                trace("Options selected");
+				FlxG.switchState(new OptionsMenuState());
             case 2:
                 // Handle "Quit"
 				System.exit(0);
