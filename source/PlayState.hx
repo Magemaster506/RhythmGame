@@ -245,7 +245,7 @@ class PlayState extends FlxState {
 		}
 		if (FlxG.keys.justPressed.E)
 		{
-			trace(invItems);
+			retrieveItemData();	
 		}
 
 		var dialogueActive:Bool = false;
@@ -410,7 +410,7 @@ class PlayState extends FlxState {
 			// Make sure all pause options are hidden
 			for (option in pauseOptions)
 			{
-				if (option != null)
+				if (option != null) // ligatures != apparently?
 				{
 					option.visible = false;
 				}
@@ -517,7 +517,6 @@ class PlayState extends FlxState {
 			if (activeQuests[i].title == questTitle)
 			{
 				activeQuests.splice(i, 1);
-
 				updateQuestList();
 
 				break;
@@ -551,11 +550,6 @@ class PlayState extends FlxState {
 		FlxTween.tween(blackOverlay, {y: 775}, 1.8, {ease: FlxEase.expoOut});
 		FlxTween.tween(locationText, {alpha: 0}, 1, {startDelay: 4});
 	}
-	
-	private function testFunctionNVIM():Void
-	{		
-        	trace("All this for a single print. :(");
-	}
 
 	private function addInvItem(itemData:Item):Void
 	{
@@ -566,5 +560,18 @@ class PlayState extends FlxState {
 
 		invItems.push(item);
 	}
+
+	private function retrieveItemData():Void
+	{
+		for (i in invItems)
+		{
+			trace(i.name);
+			// Build this up later
+		}
+
+	}
+
+
+
 }
 
