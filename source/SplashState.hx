@@ -20,14 +20,13 @@ class SplashState extends FlxState {
         splashImage.screenCenter();
         add(splashImage);
 
-        // Load 1x1 mouse file 
-		var cursorBitapData = Assets.getBitmapData("assets/images/other/1x1Image.png");
-		FlxG.mouse.load(cursorBitapData);
+		// Missing texture
+		var missingTexture = Assets.getBitmapData("assets/images/smallMissingTexture.png");
+		FlxG.mouse.load(missingTexture);
 
         // Fade in
         splashImage.alpha = 0;
 		FlxTween.tween(splashImage, {alpha: 1}, 2, {type: FlxTweenType.PERSIST});
-        
 
         // State transition timer
         timer = new FlxTimer();

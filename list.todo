@@ -1,5 +1,7 @@
 
 programming:
+    mainMenu:
+        ☐ Options text not animating when selected
     dialogue:
         ☐ Update NPC dialogue during runtime
         ✔ Opening and closing the pause menu during dialogue allows the player to start moving @done (10/7/2024, 7:00:52 PM)

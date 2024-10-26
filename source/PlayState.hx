@@ -9,12 +9,11 @@ import openfl.Assets;
 
 using flixel.util.FlxSpriteUtil;
 
-
 class PlayState extends FlxState {
 	// Allocations sorta
-    private var player:Player;
-    private var background:FlxSprite;
-    private var npcs:Array<NPC>;
+    	private var player:Player;
+    	private var background:FlxSprite;
+    	private var npcs:Array<NPC>;
 	private var pauseMenuBottom:FlxSprite;
 	private var pauseMenuTop:FlxSprite;
 	public var isPaused:Bool = false;
@@ -41,8 +40,11 @@ class PlayState extends FlxState {
 
 	private var questHeaderImage:FlxSprite;
 
-	// Quest Items
+	// Quest Data
 	public var questTestData:Quest;
+
+	// Item Data
+	public var itemTestData:Item;
 
 	// Location Splash
 	private var locationText:FlxSprite;
@@ -64,6 +66,9 @@ class PlayState extends FlxState {
 
 		// Initialize Quest Data
 		questTestData = new Quest("Test Quest Title", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
+
+		// Initialize Item Data
+		itemTestData = new Item("Test Item Name", "This is a test item, you are reading the description", "assets/images/missingTexture.png");	
 
         // Initialize NPCs
         npcs = [];
@@ -204,6 +209,7 @@ class PlayState extends FlxState {
 		add(blackOverlay);
     }
 
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
@@ -223,6 +229,12 @@ class PlayState extends FlxState {
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
+		
+		if (FlxG.keys.justPressed.G)
+		{
+			testFunctionNVIM();
+		}
+
 		var dialogueActive:Bool = false;
 		for (npc in npcs)
 		{
@@ -527,4 +539,8 @@ class PlayState extends FlxState {
 		FlxTween.tween(locationText, {alpha: 0}, 1, {startDelay: 4});
 	}
 	
+	private function testFunctionNVIM():Void
+	{		
+        	trace("All this for a single print. :(");
+	}
 }

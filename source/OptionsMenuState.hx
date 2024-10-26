@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import lime.system.System;
 
 class OptionsMenuState extends FlxState {
 
@@ -17,8 +16,7 @@ class OptionsMenuState extends FlxState {
     {
         // Background image
         background = new FlxSprite(0, 0);
-        background.loadGraphic("assets/images/missingTexture.png");
-        add(background);
+		background.loadGraphic("assets/images/missingTexture.png");
 
         // Transition obj
         blackOverlay = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height + 200, 0xFF000000);
@@ -26,6 +24,21 @@ class OptionsMenuState extends FlxState {
 
         initialTransition();
     }
+
+	override public function update(elapsed:Float):Void
+	{
+		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			FlxG.switchState(new MainMenuState());
+		}
+		if (FlxG.keys.justPressed.Q)
+		{
+			// test for visibility
+			add(background);
+		}
+	}
 
     private function initialTransition():Void
     {
