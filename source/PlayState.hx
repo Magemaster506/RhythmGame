@@ -44,7 +44,8 @@ class PlayState extends FlxState {
 	public var questTestData:Quest;
 
 	// Item Data
-	public var itemTestData:Item;
+	public var itemTestData:Item;	
+	private var invItems:Array<Item> = [];
 
 	// Location Splash
 	private var locationText:FlxSprite;
@@ -66,6 +67,9 @@ class PlayState extends FlxState {
 
 		// Initialize Quest Data
 		questTestData = new Quest("Test Quest Title", "Locate the key to open the hidden door.", "assets/images/menus/pausemenu/questBoxBig.png");
+
+		// Initialize inventory items array
+		invItems = [];
 
 		// Initialize Item Data
 		itemTestData = new Item("Test Item Name", "This is a test item, you are reading the description", "assets/images/missingTexture.png");	
@@ -233,6 +237,15 @@ class PlayState extends FlxState {
 		if (FlxG.keys.justPressed.G)
 		{
 			testFunctionNVIM();
+		}
+
+		if (FlxG.keys.justPressed.I)
+		{
+			addInvItem(itemTestData);
+		}
+		if (FlxG.keys.justPressed.E)
+		{
+			trace(invItems);
 		}
 
 		var dialogueActive:Bool = false;
@@ -543,4 +556,15 @@ class PlayState extends FlxState {
 	{		
         	trace("All this for a single print. :(");
 	}
+
+	private function addInvItem(itemData:Item):Void
+	{
+		var name = itemData.name;
+		var description = itemData.description;
+		var imagePath = itemData.imagePath;
+		var item = new Item(name, description, imagePath);
+
+		invItems.push(item);
+	}
 }
+
