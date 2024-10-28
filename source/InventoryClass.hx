@@ -9,5 +9,10 @@ using flixel.util.FlxSpriteUtil;
 
 class InventoryClass extends FlxSprite {
 
-
+	public function new(invItems:String[])
+	{
+		//access lookup table
+		//get data from table
+		//seperate data into packages
+	}
 }

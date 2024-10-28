@@ -53,6 +53,9 @@ class PlayState extends FlxState {
 	// Transition OBJ
 	private var blackOverlay:FlxSprite;
 
+	// Item lookup table ref
+	private var invItemLookupTable:InvItemLookupTable;
+
     override public function create():Void {
         super.create();
         
@@ -70,9 +73,6 @@ class PlayState extends FlxState {
 
 		// Initialize inventory items array
 		invItems = [];
-
-		// Initialize Item Data
-		itemTestData = new Item("Test Item Name", "This is a test item, you are reading the description", "assets/images/missingTexture.png");	
 
         // Initialize NPCs
         npcs = [];
@@ -235,7 +235,7 @@ class PlayState extends FlxState {
 		}
 		if (FlxG.keys.justPressed.I)
 		{
-			addInvItem(itemTestData);
+			addInvItem(InvItemLookupTable.testItemData)	
 		}
 		if (FlxG.keys.justPressed.E)
 		{
