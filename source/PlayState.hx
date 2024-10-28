@@ -233,12 +233,6 @@ class PlayState extends FlxState {
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
-		
-		if (FlxG.keys.justPressed.G)
-		{
-			testFunctionNVIM();
-		}
-
 		if (FlxG.keys.justPressed.I)
 		{
 			addInvItem(itemTestData);
@@ -535,8 +529,6 @@ class PlayState extends FlxState {
 			noQuestsImage.visible = false;
 		}
 
-		if (isPaused == true) {}
-		
 		for (i in 0...activeQuests.length)
 		{
 			var quest = activeQuests[i];
@@ -566,7 +558,8 @@ class PlayState extends FlxState {
 		for (i in invItems)
 		{
 			trace(i.name);
-			// Build this up later
+			// Build this up later, i feel like its gonna be really useful
+			   // for loading items into an inventory or list.
 		}
 
 	}
