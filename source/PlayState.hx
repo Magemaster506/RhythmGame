@@ -567,8 +567,7 @@ class PlayState extends FlxState {
 	private function lookupItemData(data:Item):Void
 	{
 
+
 	}
-
-
 }
 
