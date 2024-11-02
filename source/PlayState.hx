@@ -235,7 +235,7 @@ class PlayState extends FlxState {
 		}
 		if (FlxG.keys.justPressed.I)
 		{
-			addInvItem(InvItemLookupTable.testItemData)	
+			addInvItem(InvItemLookupTable.testItemData);
 		}
 		if (FlxG.keys.justPressed.E)
 		{
@@ -564,9 +564,8 @@ class PlayState extends FlxState {
 
 	}
 
-	private function lookupItemData(data:Item):Void
+	private function lookupItemData(name:String):Void
 	{
-
 
 	}
 }
