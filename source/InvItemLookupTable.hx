@@ -2,6 +2,10 @@ import flixel.FlxG;
 
 class InvItemLookupTable{
 
-	private var testItemData:Item;
-	testItemData = new Item("Test name", "test description", "assets/images/missingTexture.png")
+	public var testItemData:Item;
+
+	public function new():Void
+	{
+		testItemData = new Item("Test name", "test description", "assets/images/missingTexture.png");
+	}
 }
